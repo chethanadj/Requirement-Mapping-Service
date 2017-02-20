@@ -55,13 +55,8 @@ public class HTTPRequester {
         byte[] plainCredsBytes = plainCreds.getBytes();
         byte[] base64CredsBytes = Base64.encodeBase64(plainCredsBytes);
         String base64Creds = new String(base64CredsBytes);
-
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Basic " + base64Creds);
-
-
-
-
         HttpUriRequest request = RequestBuilder.get().setUri(uri).addHeader("Authorization", "Basic " + base64Creds).build();
         return execute(request);
     }
