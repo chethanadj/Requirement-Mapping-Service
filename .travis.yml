@@ -1,8 +1,0 @@
-before : cd GraphService
-language: java
-jdk:
-  - oraclejdk8
-script:
-  cd GraphService
-after_success:
-  mvn clean install

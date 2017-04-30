@@ -2,9 +2,7 @@ package com.sceptra.domain;
 
 import org.neo4j.ogm.annotation.*;
 
-/**
- * Created by chiranz on 2/11/17.
- */
+
 
 @RelationshipEntity(type="DEFINED")
 public class Defined {

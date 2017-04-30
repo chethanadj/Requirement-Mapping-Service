@@ -3,9 +3,7 @@ package com.sceptra.domain;
 import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.NodeEntity;
 
-/**
- * Created by chiranz on 2/10/17.
- */
+
 @NodeEntity
 public class DefineWord {
 

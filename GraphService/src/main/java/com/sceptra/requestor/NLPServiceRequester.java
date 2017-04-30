@@ -12,9 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.io.IOException;
 import java.util.ArrayList;
 
-/**
- * Created by chiranz on 2/20/17.
- */
+
 public class NLPServiceRequester {
 
     @Autowired

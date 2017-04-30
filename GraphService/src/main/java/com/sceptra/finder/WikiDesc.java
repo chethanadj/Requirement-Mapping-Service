@@ -1,9 +1,7 @@
 package com.sceptra.finder;
 
 import org.springframework.web.client.RestTemplate;
-/**
- * Created by chiranz on 2/5/17.
- */
+
 public class WikiDesc {
 
 

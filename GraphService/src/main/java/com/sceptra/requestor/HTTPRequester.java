@@ -1,8 +1,6 @@
 package com.sceptra.requestor;
 
-/**
- * Created by chiranz on 2/12/17.
- */
+
 
 import com.google.gson.JsonObject;
 import org.apache.commons.codec.binary.Base64;

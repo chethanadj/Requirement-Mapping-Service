@@ -5,9 +5,7 @@ import org.jsoup.nodes.Document;
 
 import java.io.IOException;
 
-/**
- * Created by chiranz on 2/20/17.
- */
+
 public class TechTermDesc {
 
     public static String TECH_TERMS_BASE="https://techterms.com/definition/";

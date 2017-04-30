@@ -15,7 +15,7 @@ public class Tagger {
 			
 		try {
 			tagger = new MaxentTagger(
-					"/home/chiranz/Downloads/stanford-postagger-full-2011-05-18/models/left3words-distsim-wsj-0-18.tagger");
+					"C://stanford-postagger-2016-10-31/models/left3words-distsim-wsj-0-18.tagger");
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -34,7 +34,7 @@ public class Tagger {
 		MaxentTagger tagger=null;
 		try {
 			tagger = new MaxentTagger(
-					"/home/chiranz/Downloads/stanford-postagger-full-2011-05-18/models/left3words-distsim-wsj-0-18.tagger");
+					"C://stanford-postagger-2016-10-31/models/left3words-distsim-wsj-0-18.tagger");
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

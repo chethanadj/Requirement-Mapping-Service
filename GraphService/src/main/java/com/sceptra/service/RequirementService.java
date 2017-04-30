@@ -17,9 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Map;
 
-/**
- * Created by chiranz on 2/10/17.
- */
+
 @RestController
 public class RequirementService {
 

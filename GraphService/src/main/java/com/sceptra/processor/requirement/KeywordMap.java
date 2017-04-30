@@ -21,9 +21,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-/**
- * Created by chiranz on 2/10/17.
- */
+
 public class KeywordMap {
 
     @Autowired
