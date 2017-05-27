@@ -1,7 +1,6 @@
 package com.sceptra.repository;
 
-import com.sceptra.domain.DefineWord;
-import com.sceptra.domain.Defined;
+import com.sceptra.domain.requirement.Defined;
 import org.springframework.data.neo4j.repository.GraphRepository;
 
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package com.sceptra.domain;
+package com.sceptra.domain.requirement;
 
 import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.NodeEntity;

@@ -1,23 +1,15 @@
 package com.sceptra.service;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.sceptra.domain.DefineWord;
-import com.sceptra.domain.Defined;
-import com.sceptra.domain.KeyWord;
+import com.sceptra.domain.requirement.DefineWord;
+import com.sceptra.domain.requirement.Defined;
+import com.sceptra.domain.requirement.KeyWord;
 import com.sceptra.finder.TechTermDesc;
 import com.sceptra.finder.WikiDesc;
 import com.sceptra.processor.Tagger;
 import com.sceptra.repository.DefineWordRepository;
 import com.sceptra.repository.DefinedRelRepository;
 import com.sceptra.repository.KeyWordRepository;
-import com.sceptra.requestor.HTTPRequester;
 import com.sceptra.requestor.NLPServiceRequester;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.ParseException;
-import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -26,7 +18,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.util.ArrayList;
 
 
