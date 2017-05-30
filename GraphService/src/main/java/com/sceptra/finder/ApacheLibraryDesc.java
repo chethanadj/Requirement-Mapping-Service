@@ -60,7 +60,7 @@ public class ApacheLibraryDesc {
         ArrayList<TechnologyEntity> technologyEntityArrayList = new ArrayList();
         try {
             JSONObject json = new JSONObject(readUrl(APACHE_PROJECTS_BASE + librayName));
-            System.out.println(json.toString());
+//            System.out.println(json.toString());
             if (json.has("category"))
                 category = json.getString("category");
             if (json.has("description"))
@@ -70,15 +70,17 @@ public class ApacheLibraryDesc {
             if (json.has("release"))
                 name = json.getJSONArray("release").getJSONObject(0).getString("name");
 
-            if (programming_language.toLowerCase().contains("java")&&category.equalsIgnoreCase("library")) {
+            if (programming_language.toLowerCase().contains("java")&&category.toLowerCase().contains("library")) {
                 Map<String, Integer> keywordUsage = keywordMap.getParents(description);
                 keywordUsage.forEach((k, v) -> {
                     if (v > 2) {
                         TechnologyEntity technologyEntity = new TechnologyEntity();
                         technologyEntity.setTechnology_usages(k);
-                        technologyEntity.setTechnology_name(name);
-                        if(technologyRepository.findByTechnology_name(name)!=null)
+                        technologyEntity.setTechnologyName(name);
+//                        if(technologyRepository.findByTechnologyName(name)==null){
                         technologyEntityArrayList.add(technologyRepository.save(technologyEntity));
+                            System.out.println(technologyEntity.toString());
+//                        }
                     }
                 });
 

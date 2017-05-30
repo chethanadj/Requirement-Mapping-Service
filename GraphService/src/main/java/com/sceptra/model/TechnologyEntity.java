@@ -18,7 +18,7 @@ public class TechnologyEntity {
     public String toString() {
         return "TechnologyEntity{" +
                 "id=" + id +
-                ", technology_name='" + technology_name + '\'' +
+                ", technologyName='" + technologyName + '\'' +
                 ", technology_usages='" + technology_usages + '\'' +
                 ", rating=" + rating +
                 '}';
@@ -37,12 +37,12 @@ public class TechnologyEntity {
         this.id = id;
     }
 
-    public String getTechnology_name() {
-        return technology_name;
+    public String getTechnologyName() {
+        return technologyName;
     }
 
-    public void setTechnology_name(String technology_name) {
-        this.technology_name = technology_name;
+    public void setTechnologyName(String technologyName) {
+        this.technologyName = technologyName;
     }
 
     public String getTechnology_usages() {
@@ -57,7 +57,7 @@ public class TechnologyEntity {
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Integer id;
 
-    private String technology_name;
+    private String technologyName;
 
     private String technology_usages;
 
