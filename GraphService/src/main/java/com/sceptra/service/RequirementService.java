@@ -34,7 +34,7 @@ public class RequirementService {
 
     Tagger tagger=new Tagger();
 
-    @RequestMapping(value = "para" , produces = "application/json",method = RequestMethod.POST)
+    @RequestMapping(value = "requirement" , produces = "application/json",method = RequestMethod.POST)
     public
     @ResponseBody
     ResponseEntity<KeyWord> addKeyWord(

@@ -1,6 +1,7 @@
 
 package com.sceptra;
 
+import com.sceptra.finder.ApacheLibraryDesc;
 import com.sceptra.finder.TechTermDesc;
 import com.sceptra.finder.WikiDesc;
 import com.sceptra.processor.Tagger;
@@ -13,7 +14,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.neo4j.repository.config.EnableNeo4jRepositories;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+@EnableTransactionManagement
 @SpringBootApplication
 @EnableNeo4jRepositories
 public class Application {
@@ -58,5 +61,10 @@ public class Application {
 	Tagger getTagger(){
 
 		return new Tagger();
+	}
+
+	@Bean
+	ApacheLibraryDesc getApacheLibraryDesc(){
+		return new ApacheLibraryDesc();
 	}
 }

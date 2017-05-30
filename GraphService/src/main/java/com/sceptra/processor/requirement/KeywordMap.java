@@ -77,14 +77,15 @@ public class KeywordMap {
 
                 if (keywords != null) {
                     keywords.forEach(defined -> {
-                        System.out.println(defined.toString());
-                        if (keywordMap.get((defined.getDescription())) == null) {
-                            keywordMap.put(defined.getDescription(), 1);
-                        } else {
-                            Integer integer = keywordMap.get((defined.getDescription()));
-                            keywordMap.put(defined.getDescription(), integer + 1);
+                        if(defined.getDescription()!=null) {
+                            System.out.println(defined.toString());
+                            if (keywordMap.get((defined.getDescription())) == null) {
+                                keywordMap.put(defined.getDescription(), 1);
+                            } else {
+                                Integer integer = keywordMap.get((defined.getDescription()));
+                                keywordMap.put(defined.getDescription(), integer + 1);
+                            }
                         }
-
 
                     });
                 }
