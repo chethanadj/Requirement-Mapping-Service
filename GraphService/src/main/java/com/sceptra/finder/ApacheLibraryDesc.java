@@ -77,6 +77,7 @@ public class ApacheLibraryDesc {
                         TechnologyEntity technologyEntity = new TechnologyEntity();
                         technologyEntity.setTechnology_usages(k);
                         technologyEntity.setTechnology_name(name);
+                        if(technologyRepository.findByTechnology_name(name)!=null)
                         technologyEntityArrayList.add(technologyRepository.save(technologyEntity));
                     }
                 });

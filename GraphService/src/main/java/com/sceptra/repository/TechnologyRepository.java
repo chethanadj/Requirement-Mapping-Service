@@ -8,5 +8,6 @@ import org.springframework.data.repository.CrudRepository;
  */
 public interface TechnologyRepository extends CrudRepository<TechnologyEntity, Integer> {
 
+    TechnologyEntity findByTechnology_name(String technology_name);
 }
 
