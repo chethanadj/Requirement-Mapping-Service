@@ -23,161 +23,161 @@ import java.util.ArrayList;
 @RestController
 public class KeyWordService {
 
-	@Autowired
-	private WikiDesc wikiDesc;
+    @Autowired
+    KeyWordRepository keyWordRepository;
+    @Autowired
+    DefinedRelRepository definedRelRepository;
+    @Autowired
+    DefineWordRepository defineWordRepository;
+    @Autowired
+    NLPServiceRequester nlpServiceRequester;
+    @Autowired
+    private WikiDesc wikiDesc;
+    @Autowired
+    private TechTermDesc techTermDesc;
 
-	@Autowired
-	private TechTermDesc  techTermDesc;
-
-	@Autowired
-	KeyWordRepository keyWordRepository;
-
-	@Autowired
-	DefinedRelRepository definedRelRepository;
-
-	@Autowired
-	DefineWordRepository defineWordRepository;
-	@Autowired
-	NLPServiceRequester nlpServiceRequester;
-
-
-
-	@RequestMapping(value = "all" , produces = "application/json",method = RequestMethod.GET)
+    @RequestMapping(value = "all", produces = "application/json", method = RequestMethod.GET)
     public
     @ResponseBody
     ResponseEntity<Iterable<KeyWord>> getAllKeyWord(
-            @RequestHeader HttpHeaders headers, 
+            @RequestHeader HttpHeaders headers,
             HttpServletRequest request) throws Exception {
 
-		KeyWord person=new KeyWord("abc");
+        KeyWord person = new KeyWord("abc");
 
-		keyWordRepository.save(person);
-		
-		return new ResponseEntity(keyWordRepository.findAll(),HttpStatus.FOUND);
-	
-	}
+        keyWordRepository.save(person);
 
-	@RequestMapping(value = "keyword" , produces = "application/json",method = RequestMethod.POST)
-	public
-	@ResponseBody
-	ResponseEntity<KeyWord> addKeyWord(
-			@RequestBody(required = true) KeyWord word,
-			BindingResult result,
-			@RequestHeader HttpHeaders headers,
-			HttpServletRequest request) throws Exception {
+        return new ResponseEntity(keyWordRepository.findAll(), HttpStatus.FOUND);
 
-		String keyWordDesc=techTermDesc.getDescription(word.getDescription());
-		System.out.println(keyWordDesc);
-		ArrayList<String> neighbours=nlpServiceRequester.getCustomFilteredWordList(keyWordDesc);
-		if(keyWordRepository.findByDescription(word.getDescription())!=null){
-			word=keyWordRepository.findByDescription(word.getDescription());
-		}
-		KeyWord	keyWord=keyWordRepository.save(word);
+    }
 
-		for (int a=0;a<neighbours.size();a++) {
+    @RequestMapping(value = "keyword", produces = "application/json", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    ResponseEntity<KeyWord> addKeyWord(
+            @RequestBody(required = true) KeyWord word,
+            BindingResult result,
+            @RequestHeader HttpHeaders headers,
+            HttpServletRequest request) throws Exception {
 
-			DefineWord tempWord=null;
-			if(defineWordRepository.findByDescription(neighbours.get(a))==null) {
-				tempWord=new DefineWord(neighbours.get(a));
-				tempWord = defineWordRepository.save(new DefineWord(neighbours.get(a)));
-			}else {
-				tempWord=defineWordRepository.findByDescription(neighbours.get(a));
-				tempWord = defineWordRepository.findByDescription(neighbours.get(a));
-			}
-			definedRelRepository.save(new Defined(keyWord,tempWord));
+        String keyWordDesc = techTermDesc.getDescription(word.getDescription());
+        System.out.println(keyWordDesc);
+        ArrayList<String> neighbours = nlpServiceRequester.getCustomFilteredWordList(keyWordDesc);
+        if (keyWordRepository.findByDescription(word.getDescription()) != null) {
+            word = keyWordRepository.findByDescription(word.getDescription());
+        }
+        KeyWord keyWord = keyWordRepository.save(word);
 
-		}
+        for (int a = 0; a < neighbours.size(); a++) {
 
+            DefineWord tempWord = null;
+            if (defineWordRepository.findByDescription(neighbours.get(a)) == null) {
+                tempWord = new DefineWord(neighbours.get(a));
+                tempWord = defineWordRepository.save(new DefineWord(neighbours.get(a)));
+            } else {
+                tempWord = defineWordRepository.findByDescription(neighbours.get(a));
+                tempWord = defineWordRepository.findByDescription(neighbours.get(a));
+            }
+            Float size = Float.valueOf(neighbours.size());
+            Float one = 1.0f;
+            definedRelRepository.save(new Defined(keyWord, tempWord, (one / size)));
 
- 		return new ResponseEntity(keyWord,HttpStatus.CREATED);
-
-	}
+        }
 
 
-	@RequestMapping(value = "keywordlist" , produces = "application/json",method = RequestMethod.POST)
-	public
-	@ResponseBody
-	ResponseEntity<ArrayList<KeyWord>> addBatchKeyWord(
-			@RequestBody(required = true) ArrayList<KeyWord> words,
-			BindingResult result,
-			@RequestHeader HttpHeaders headers,
-			HttpServletRequest request) throws Exception {
+        return new ResponseEntity(keyWord, HttpStatus.CREATED);
 
-		ArrayList<KeyWord> keyWords=new ArrayList<>();
-		words.forEach(word->{
-		String keyWordDesc=techTermDesc.getDescription(word.getDescription());
-		System.out.println(keyWordDesc);
-		ArrayList<String> neighbours=nlpServiceRequester.getCustomFilteredWordList(keyWordDesc);
-		if(keyWordRepository.findByDescription(word.getDescription())!=null){
-			word=keyWordRepository.findByDescription(word.getDescription());
-		}
-		KeyWord	keyWord=keyWordRepository.save(word);
-			keyWords.add(keyWord);
-		for (int a=0;a<neighbours.size();a++) {
+    }
 
-			DefineWord tempWord=null;
-			if(defineWordRepository.findByDescription(neighbours.get(a))==null) {
-				tempWord=new DefineWord(neighbours.get(a));
-				tempWord = defineWordRepository.save(new DefineWord(neighbours.get(a)));
-			}else {
-				tempWord=defineWordRepository.findByDescription(neighbours.get(a));
-				tempWord = defineWordRepository.findByDescription(neighbours.get(a));
-			}
-			definedRelRepository.save(new Defined(keyWord,tempWord));
 
-		}
-		});
+    @RequestMapping(value = "keywordlist", produces = "application/json", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    ResponseEntity<ArrayList<KeyWord>> addBatchKeyWord(
+            @RequestBody(required = true) ArrayList<KeyWord> words,
+            BindingResult result,
+            @RequestHeader HttpHeaders headers,
+            HttpServletRequest request) throws Exception {
 
-		return new ResponseEntity(keyWords,HttpStatus.CREATED);
+        ArrayList<KeyWord> keyWords = new ArrayList<>();
+        words.forEach(word -> {
+            String keyWordDesc = techTermDesc.getDescription(word.getDescription());
+            System.out.println(keyWordDesc);
+            ArrayList<String> neighbours = nlpServiceRequester.getCustomFilteredWordList(keyWordDesc);
+            if (keyWordRepository.findByDescription(word.getDescription()) != null) {
+                word = keyWordRepository.findByDescription(word.getDescription());
+            }
+            KeyWord keyWord = keyWordRepository.save(word);
+            keyWords.add(keyWord);
+            for (int a = 0; a < neighbours.size(); a++) {
 
-	}
+                DefineWord tempWord = null;
+                if (defineWordRepository.findByDescription(neighbours.get(a)) == null) {
+                    tempWord = new DefineWord(neighbours.get(a));
+                    tempWord = defineWordRepository.save(new DefineWord(neighbours.get(a)));
+                } else {
+                    tempWord = defineWordRepository.findByDescription(neighbours.get(a));
+                    tempWord = defineWordRepository.findByDescription(neighbours.get(a));
+                }
+                Float size = Float.valueOf(neighbours.size());
+                Float one = 1.0f;
+                definedRelRepository.save(new Defined(keyWord, tempWord, (one / size)));
 
-	@RequestMapping(value = "keywordcategory" , produces = "application/json",method = RequestMethod.POST)
-	public
-	@ResponseBody
-	ResponseEntity<ArrayList<KeyWord>> addByCategoryKeyWord(
-			@RequestBody(required = true)String category,
-			BindingResult result,
-			@RequestHeader HttpHeaders headers,
-			HttpServletRequest request) throws Exception {
+            }
+        });
 
-		ArrayList<KeyWord> keyWords=new ArrayList<>();
-		ArrayList<KeyWord> words=techTermDesc.getAllKeywords(category);
-		words.forEach(word->{
-			String keyWordDesc=techTermDesc.getDescription(word.getDescription());
-			System.out.println("key word is :"+keyWordDesc);
-			ArrayList<String> neighbours=nlpServiceRequester.getCustomFilteredWordList(keyWordDesc);
-			if(keyWordRepository.findByDescription(word.getDescription())!=null){
-				word=keyWordRepository.findByDescription(word.getDescription());
-			}
-			KeyWord	keyWord=keyWordRepository.save(word);
-			keyWords.add(keyWord);
-			for (int a=0;a<neighbours.size();a++) {
+        return new ResponseEntity(keyWords, HttpStatus.CREATED);
 
-				DefineWord tempWord=null;
-				if(defineWordRepository.findByDescription(neighbours.get(a))==null) {
-					tempWord=new DefineWord(neighbours.get(a));
-					tempWord = defineWordRepository.save(new DefineWord(neighbours.get(a)));
-				}else {
-					tempWord=defineWordRepository.findByDescription(neighbours.get(a));
-					tempWord = defineWordRepository.findByDescription(neighbours.get(a));
-				}
-				definedRelRepository.save(new Defined(keyWord,tempWord));
+    }
 
-			}
-		});
+    @RequestMapping(value = "keywordcategory", produces = "application/json", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    ResponseEntity<ArrayList<KeyWord>> addByCategoryKeyWord(
+            @RequestBody(required = true) String category,
+            BindingResult result,
+            @RequestHeader HttpHeaders headers,
+            HttpServletRequest request) throws Exception {
 
-		return new ResponseEntity(keyWords,HttpStatus.CREATED);
+        ArrayList<KeyWord> keyWords = new ArrayList<>();
+        ArrayList<KeyWord> words = techTermDesc.getAllKeywords(category);
+        words.forEach(word -> {
+            System.out.println(word);
+            String keyWordDesc = techTermDesc.getDescription(word.getDescription());
+            System.out.println("key word is :" + keyWordDesc);
+            ArrayList<String> neighbours = nlpServiceRequester.getCustomFilteredWordList(keyWordDesc);
+            if (!neighbours.isEmpty()) {
+                if (keyWordRepository.findByDescription(word.getDescription()) != null) {
+                    word = keyWordRepository.findByDescription(word.getDescription());
+                }
+                KeyWord keyWord = keyWordRepository.save(word);
+                keyWords.add(keyWord);
+                for (int a = 0; a < neighbours.size(); a++) {
 
-	}
+                    DefineWord tempWord = null;
+                    if (defineWordRepository.findByDescription(neighbours.get(a)) == null) {
+                        tempWord = defineWordRepository.save(new DefineWord(neighbours.get(a)));
+                    } else {
+                        tempWord = defineWordRepository.findByDescription(neighbours.get(a));
+                    }
+                    Float size = Float.valueOf(neighbours.size());
+                    Float one = 1.0f;
+                    definedRelRepository.save(new Defined(keyWord, tempWord, (one / size)));
+                }
+            }
+        });
 
-	private KeyWord getKeyWord(String desc){
+        return new ResponseEntity(keyWords, HttpStatus.CREATED);
 
-		if(keyWordRepository.findByDescription(desc)!=null)
-			 return keyWordRepository.findByDescription(desc);
-		else
-			return keyWordRepository.save(new KeyWord(desc));
+    }
 
-	}
+    private KeyWord getKeyWord(String desc) {
+
+        if (keyWordRepository.findByDescription(desc) != null)
+            return keyWordRepository.findByDescription(desc);
+        else
+            return keyWordRepository.save(new KeyWord(desc));
+
+    }
 
 }

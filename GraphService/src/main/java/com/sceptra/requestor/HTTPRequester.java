@@ -1,14 +1,13 @@
 package com.sceptra.requestor;
 
 
-
 import com.google.gson.JsonObject;
 import org.apache.commons.codec.binary.Base64;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.springframework.http.HttpHeaders;
 
@@ -17,13 +16,15 @@ import java.io.UnsupportedEncodingException;
 
 public class HTTPRequester {
 
-    private HttpClient httpclient;
+    private CloseableHttpClient httpclient;
 
     public HTTPRequester() {
+
         this.httpclient = HttpClients.createDefault();
+
     }
 
-    public HttpResponse putRequest(String uri, String body) {
+    public CloseableHttpResponse putRequest(String uri, String body) {
         RequestBuilder requestBuilder = null;
         try {
             requestBuilder = RequestBuilder.put().setHeader("Content-Type", "application/json").setUri(uri)
@@ -35,7 +36,7 @@ public class HTTPRequester {
         return execute(requestBuilder.build());
     }
 
-    public HttpResponse postRequest(String uri, JsonObject body) {
+    public CloseableHttpResponse postRequest(String uri, JsonObject body) {
         RequestBuilder requestBuilder = null;
         try {
             requestBuilder = RequestBuilder.post().setHeader("Content-Type", "application/json").setUri(uri)
@@ -47,7 +48,7 @@ public class HTTPRequester {
         return execute(requestBuilder.build());
     }
 
-    public HttpResponse getRequest(String uri) {
+    public CloseableHttpResponse getRequest(String uri) {
 
         String plainCreds = "neo4j:admin";
         byte[] plainCredsBytes = plainCreds.getBytes();
@@ -58,13 +59,12 @@ public class HTTPRequester {
         headers.add("Authorization", "Basic " + base64Creds);
 
 
-
-
-        HttpUriRequest request = RequestBuilder.get().setUri(uri).addHeader("Authorization", "Basic " + base64Creds).build();
+        HttpUriRequest request = RequestBuilder.get()
+                .setUri(uri).addHeader("Authorization", "Basic " + base64Creds).build();
         return execute(request);
     }
 
-    private HttpResponse execute(HttpUriRequest request) {
+    private CloseableHttpResponse execute(HttpUriRequest request) {
         try {
             return httpclient.execute(request);
         } catch (IOException e) {
@@ -72,4 +72,12 @@ public class HTTPRequester {
         }
     }
 
+    public void closeConn() {
+
+        try {
+            this.httpclient.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -67,21 +67,23 @@ public class ApacheLibraryDesc {
                 description = json.getString("description");
             if (json.has("programming-language"))
                 programming_language = json.getString("programming-language");
-            if (json.has("release"))
-                name = json.getJSONArray("release").getJSONObject(0).getString("name");
+//            if (json.has("release"))
+//                name = json.getJSONArray("release").getJSONObject(0).getString("name");
+            if (json.has("name"))
+                            name = json.getString("name");
 
-            if (programming_language.toLowerCase().contains("java")&&category.toLowerCase().contains("library")) {
+            if (programming_language.toLowerCase().contains("java") && category.toLowerCase().contains("library")) {
                 Map<String, Integer> keywordUsage = keywordMap.getParents(description);
                 keywordUsage.forEach((k, v) -> {
-                    if (v > 2) {
-                        TechnologyEntity technologyEntity = new TechnologyEntity();
-                        technologyEntity.setTechnology_usages(k);
-                        technologyEntity.setTechnologyName(name);
+//                    if (v > 2) {
+                    TechnologyEntity technologyEntity = new TechnologyEntity();
+                    technologyEntity.setTechnology_usages(k);
+                    technologyEntity.setTechnologyName(name);
 //                        if(technologyRepository.findByTechnologyName(name)==null){
-                        technologyEntityArrayList.add(technologyRepository.save(technologyEntity));
-                            System.out.println(technologyEntity.toString());
+                    technologyEntityArrayList.add(technologyRepository.save(technologyEntity));
+                    System.out.println(technologyEntity.toString());
 //                        }
-                    }
+//                    }
                 });
 
             } else {
@@ -117,17 +119,12 @@ public class ApacheLibraryDesc {
         ArrayList<String> techList = getTechnologyList();
         techList.forEach(tech -> {
                     try {
-                        System.out.println("Technology"+tech);
-
+                        System.out.println("Technology" + tech);
                         output.addAll(getData(tech));
-
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-
                 }
-
-
         );
         return output;
     }
