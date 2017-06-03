@@ -2,9 +2,7 @@ package com.sceptra.domain.developer;
 
 import java.util.Map;
 
-/**
- * Created by chiranz on 5/27/17.
- */
+
 public class Developer {
 
     String id;

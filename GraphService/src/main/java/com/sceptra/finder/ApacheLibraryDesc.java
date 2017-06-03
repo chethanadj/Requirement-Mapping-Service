@@ -17,9 +17,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Map;
 
-/**
- * Created by chiranz on 5/30/17.
- */
+
 public class ApacheLibraryDesc {
 
     public static String APACHE_PROJECTS_BASE = "https://projects.apache.org/json/projects/";

@@ -7,9 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by chiranz on 5/27/17.
- */
+
 public class DeveloperFilter {
 
     public Map<Developer,Technology> getDeveloperList(ArrayList<Technology> technologies){

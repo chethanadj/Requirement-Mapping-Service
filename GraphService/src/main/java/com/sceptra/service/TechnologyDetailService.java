@@ -11,9 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 
-/**
- * Created by chiranz on 5/30/17.
- */
+
 @RestController
 public class TechnologyDetailService {
 
