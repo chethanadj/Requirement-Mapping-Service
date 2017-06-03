@@ -25,7 +25,16 @@ public class TechnologyDetailService {
             @RequestHeader HttpHeaders headers,
             HttpServletRequest request) throws Exception {
 
+        return new ResponseEntity(apacheLibraryDesc.getListData(), HttpStatus.CREATED);
 
+    }
+
+    @RequestMapping(value = "techdetailfromjson" , produces = "application/json",method = RequestMethod.POST)
+    public
+    @ResponseBody
+    ResponseEntity<ArrayList<TechnologyEntity>> addBatchKeyWordFromJson(
+            @RequestHeader HttpHeaders headers,
+            HttpServletRequest request) throws Exception {
 
         return new ResponseEntity(apacheLibraryDesc.getListData(), HttpStatus.CREATED);
 

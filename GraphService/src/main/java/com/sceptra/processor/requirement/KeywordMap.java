@@ -12,8 +12,8 @@ import com.sceptra.repository.KeyWordRepository;
 import com.sceptra.requestor.HTTPRequester;
 import com.sceptra.requestor.NLPServiceRequester;
 import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
 import org.apache.http.ParseException;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -51,7 +51,7 @@ public class KeywordMap {
 
                 String url="http://localhost:7474/db/data/node/"+defineWord.getId()+"/relationships/all";
 
-                HttpResponse response= requester.getRequest(url);
+                CloseableHttpResponse response= requester.getRequest(url);
                 HttpEntity entity = response.getEntity();
 
                 String entityString = "";
@@ -61,6 +61,12 @@ public class KeywordMap {
                     e.printStackTrace();
                 } catch (IOException e) {
                     e.printStackTrace();
+                }finally {
+                    try {
+                        response.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
 
                 JsonParser parser = new JsonParser();

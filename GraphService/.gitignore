@@ -8,3 +8,4 @@ grap-service.iml
 .settings/
 /target/
 /gs-accessing-data-neo4j.iml
+/grap-service.iml
