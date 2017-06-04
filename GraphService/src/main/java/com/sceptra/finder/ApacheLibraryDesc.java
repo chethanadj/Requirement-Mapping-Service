@@ -52,9 +52,9 @@ public class ApacheLibraryDesc {
         }
     }
 
-    public static void main(String[] args) {
-        new ApacheLibraryDesc().getTechnologyList();
-    }
+//    public static void main(String[] args) {
+//        new ApacheLibraryDesc().getTechnologyList();
+//    }
 
     public ArrayList<TechnologyEntity> getData(String librayName) throws Exception {
         ArrayList<TechnologyEntity> technologyEntityArrayList = new ArrayList();
@@ -75,15 +75,15 @@ public class ApacheLibraryDesc {
             if (programming_language.toLowerCase().contains("java") && category.toLowerCase().contains("library")) {
                 Map<String, Integer> keywordUsage = keywordMap.getParents(description);
                 keywordUsage.forEach((k, v) -> {
-//                    if (v > 2) {
+                    if (v >3) {
                     TechnologyEntity technologyEntity = new TechnologyEntity();
-                    technologyEntity.setTechnology_usages(k);
+                    technologyEntity.setTechnologyUsages(k);
                     technologyEntity.setTechnologyName(name);
 //                        if(technologyRepository.findByTechnologyName(name)==null){
                     technologyEntityArrayList.add(technologyRepository.save(technologyEntity));
                     System.out.println(technologyEntity.toString());
 //                        }
-//                    }
+                    }
                 });
 
             } else {
