@@ -47,9 +47,15 @@ public class TechTermDesc {
             aTags.forEach(aTag -> {
                 String text = aTag.text().toLowerCase();
                 if (customWords.contains(text)) {
+<<<<<<< HEAD
                 String[] hrefDataArr = aTag.attr("href").toString().split(prefix);
                 KeyWord keyword = new KeyWord(hrefDataArr[hrefDataArr.length - 1]);
                 response.add(keyword);
+=======
+                    String[] hrefDataArr = aTag.attr("href").toString().split(prefix);
+                    KeyWord keyword = new KeyWord(hrefDataArr[hrefDataArr.length - 1]);
+                    response.add(keyword);
+>>>>>>> 57ea37b121ca9b635cd93dd73cb8cef328387fe9
                 }
             });
 //            res=doc.select("article").first().select("p").first().text();
