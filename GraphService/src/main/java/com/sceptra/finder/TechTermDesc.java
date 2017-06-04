@@ -141,6 +141,6 @@ public class TechTermDesc {
 
             worldList.add(customkeywordArray[start].toLowerCase().trim());
         }
-
+        return worldList;
     }
 }
