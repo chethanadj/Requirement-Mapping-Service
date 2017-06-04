@@ -77,7 +77,7 @@ public class RequirementService {
         HashSet<String> techNames=new HashSet();
         paraMap.forEach((k, v) -> {
 
-            if (v > 2) {
+            if (v > 3) {
                 ArrayList<TechnologyEntity> temp = technologyRepository
                         .findByTechnologyUsages(k);
 
