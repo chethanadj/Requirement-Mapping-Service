@@ -5,9 +5,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-/**
- * Created by chiranz on 5/30/17.
- */
 @Entity
 public class TechnologyEntity {
     public Integer getId() {
@@ -19,7 +16,7 @@ public class TechnologyEntity {
         return "TechnologyEntity{" +
                 "id=" + id +
                 ", technologyName='" + technologyName + '\'' +
-                ", technology_usages='" + technology_usages + '\'' +
+                ", technologyUsages='" + technologyUsages + '\'' +
                 ", rating=" + rating +
                 '}';
     }
@@ -45,12 +42,12 @@ public class TechnologyEntity {
         this.technologyName = technologyName;
     }
 
-    public String getTechnology_usages() {
-        return technology_usages;
+    public String getTechnologyUsages() {
+        return technologyUsages;
     }
 
-    public void setTechnology_usages(String technology_usages) {
-        this.technology_usages = technology_usages;
+    public void setTechnologyUsages(String technologyUsages) {
+        this.technologyUsages = technologyUsages;
     }
 
     @Id
@@ -59,7 +56,7 @@ public class TechnologyEntity {
 
     private String technologyName;
 
-    private String technology_usages;
+    private String technologyUsages;
 
     private Integer rating;
 
