@@ -34,6 +34,7 @@ public class TechTermDesc {
     }
 
     public ArrayList<KeyWord> getAllKeywords(String category) {
+        ArrayList<String> customWords = getCustomList();
         String prefix = "/definition/";
         ArrayList<KeyWord> response = new ArrayList<>();
 
@@ -44,7 +45,8 @@ public class TechTermDesc {
             Elements aTags = table.getElementsByAttributeValueContaining("href", prefix);
 
             aTags.forEach(aTag -> {
-
+                String text = aTag.text().toLowerCase();
+                if (customWords.contains(text)) ;
                 String[] hrefDataArr = aTag.attr("href").toString().split(prefix);
                 KeyWord keyword = new KeyWord(hrefDataArr[hrefDataArr.length - 1]);
                 response.add(keyword);
@@ -58,5 +60,87 @@ public class TechTermDesc {
 
         return response;
 
+    }
+
+
+    private ArrayList<String> getCustomList() {
+
+        ArrayList<String> worldList = new ArrayList<>();
+
+        String[] customkeywordArray = new String[]{"Alert Box", "Algorithm",
+                "Application", "Backup", "Control Panel", "Contextual Menu", "Dashboard",
+                "Database", "DBMS", "Dialog Box", "Document", "Drag and Drop",
+                "Drop Down Menu", "Driver", "Menu Bar", "Pop-Up",
+                "Repository",
+                "Scroll Bar",
+                "Scrolling",
+                "Status Bar",
+                "Text Box",
+                "Undo",
+                "Utility",
+                "Toolbar",
+                "JDBC",
+                "Artificial Intelligence",
+                "Augmented Reality",
+                "Biometrics",
+                "Client-Server Model",
+                "Configuration",
+                "Cryptography",
+                "Crossplatform",
+                "Data Mining",
+                "Domain",
+                "E-learning",
+                "Encryption",
+                "Enterprise",
+                "End User",
+                "File System",
+                "Flowchart",
+                "Graphics",
+                "Log On",
+                "Login",
+                "Load Balancing",
+                "Multimedia",
+                "Network",
+                "Password",
+                "Platform",
+                "Refresh",
+                "Speech Recognition",
+                "User Interface",
+                "Username",
+                "Website",
+                "Web Server",
+                "Web Application",
+                "Upload",
+                "Streaming",
+                "Social Networking",
+                "Social Media",
+                "Servlet",
+                "Search Engine",
+                "Navigation Bar",
+                "Home Page",
+                "E-commerce",
+                "Cloud Computing",
+                "Big Data",
+                "Android",
+                "MySQL",
+                "openGL",
+                "SaaS",
+                "SQL",
+                "Ajax",
+                "HTML",
+                "JavaScript",
+                "JQuery",
+                "NoSQL",
+                "SOAP",
+                "Socket",
+                "XHTML",
+                "Hibernate",
+                "XML"};
+
+        for (int start = 0; start < customkeywordArray.length; start++) {
+
+            worldList.add(customkeywordArray[start].toLowerCase().trim());
+        }
+        return worldList;
     }
 }
