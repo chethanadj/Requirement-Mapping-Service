@@ -1,6 +1,7 @@
 package com.sceptra.service;
 
 import com.sceptra.domain.requirement.KeyWord;
+import com.sceptra.domain.requirement.Requirement;
 import com.sceptra.finder.WikiDesc;
 import com.sceptra.model.TechnologyEntity;
 import com.sceptra.model.TechnologyPackage;
@@ -18,9 +19,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.*;
 
 
 @RestController
@@ -44,14 +43,14 @@ public class RequirementService {
     public
     @ResponseBody
     ResponseEntity<KeyWord> addKeyWord(
-            @RequestBody(required = true) String para,
+            @RequestBody(required = true) Requirement para,
             BindingResult result,
             @RequestHeader HttpHeaders headers,
             HttpServletRequest request) throws Exception {
 
-        Map<String, Integer> paraMap = keywordMap.getParents(para);
+        Map<String, Double> paraMap = keywordMap.getParents(para.getParagraph());
 
-        return new ResponseEntity(paraMap, HttpStatus.FOUND);
+        return new ResponseEntity(getFilteredListFromThreshold(paraMap), HttpStatus.FOUND);
 
     }
 
@@ -59,12 +58,12 @@ public class RequirementService {
     public
     @ResponseBody
     ResponseEntity<HashSet<String>> findPackagesForRequirement(
-            @RequestBody(required = true) String para,
+            @RequestBody(required = true) Requirement para,
             BindingResult result,
             @RequestHeader HttpHeaders headers,
             HttpServletRequest request) throws Exception {
 
-        Map<String, Integer> paraMap = keywordMap.getParents(para);
+        Map<String, Double> paraMap = keywordMap.getParents(para.getParagraph());
 
         HashSet<String> techNames= getTechNamesForTerms(paraMap);
         HashSet<String>  packages= getPackagesforTechNames(techNames);
@@ -72,12 +71,12 @@ public class RequirementService {
 
     }
 
-    private HashSet<String> getTechNamesForTerms(Map<String, Integer> paraMap) {
+    private HashSet<String> getTechNamesForTerms(Map<String, Double> paraMap) {
 
         HashSet<String> techNames=new HashSet();
         paraMap.forEach((k, v) -> {
 
-            if (v > 3) {
+            if (v > 0.3) {
                 ArrayList<TechnologyEntity> temp = technologyRepository
                         .findByTechnologyUsages(k);
 
@@ -92,6 +91,20 @@ public class RequirementService {
         });
 
         return techNames;
+    }
+
+    private Map<String, Double> getFilteredListFromThreshold(Map<String, Double> doubleMap){
+        Map<String, Double> map=new HashMap<>();
+        List<Double> list = new ArrayList<>(doubleMap.values());
+        final Double[] total = {0.0};
+        int n = (int) Math.round(list.size() * 75 / 100);
+        Double threshold=list.get(n);
+        doubleMap.forEach((k,v)->{
+            if(v>=threshold){
+                map.put(k,v);
+            }
+        });
+        return map;
     }
 
     private HashSet<String> getPackagesforTechNames(HashSet<String> technames) {
