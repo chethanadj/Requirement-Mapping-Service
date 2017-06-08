@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 
@@ -68,18 +69,19 @@ public class ApacheLibraryDesc {
 //            if (json.has("release"))
 //                name = json.getJSONArray("release").getJSONObject(0).getString("name");
             if (json.has("name"))
-                            name = json.getString("name");
+                name = json.getString("name");
 
             if (programming_language.toLowerCase().contains("java") && category.toLowerCase().contains("library")) {
-                Map<String, Integer> keywordUsage = keywordMap.getParents(description);
+                Map<String, Double> keywordUsage = keywordMap.getParents(description);
+                Double threshold = getThreshold(keywordUsage);
                 keywordUsage.forEach((k, v) -> {
-                    if (v >3) {
-                    TechnologyEntity technologyEntity = new TechnologyEntity();
-                    technologyEntity.setTechnologyUsages(k);
-                    technologyEntity.setTechnologyName(name);
+                    if (v >= threshold) {
+                        TechnologyEntity technologyEntity = new TechnologyEntity();
+                        technologyEntity.setTechnologyUsages(k);
+                        technologyEntity.setTechnologyName(name);
 //                        if(technologyRepository.findByTechnologyName(name)==null){
-                    technologyEntityArrayList.add(technologyRepository.save(technologyEntity));
-                    System.out.println(technologyEntity.toString());
+                        technologyEntityArrayList.add(technologyRepository.save(technologyEntity));
+                        System.out.println(technologyEntity.toString());
 //                        }
                     }
                 });
@@ -93,6 +95,21 @@ public class ApacheLibraryDesc {
         }
 
         return technologyEntityArrayList;
+    }
+
+    private Double getThreshold(Map<String, Double> doubleMap) {
+
+        List<Double> list = new ArrayList<>(doubleMap.values());
+        final Double[] total = {0.0};
+        Double numberOfElements = Double.valueOf(doubleMap.size());
+        doubleMap.forEach((k, v) -> {
+            total[0] += v;
+
+        });
+
+        int n = (int) Math.round(list.size() * 75 / 100);
+
+        return list.get(n);
     }
 
     private ArrayList<String> getTechnologyList() {
