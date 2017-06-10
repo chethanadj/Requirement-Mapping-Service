@@ -7,8 +7,8 @@ import com.sceptra.model.TechnologyEntity;
 import com.sceptra.model.TechnologyPackage;
 import com.sceptra.processor.requirement.KeywordMap;
 import com.sceptra.repository.RequirementHistoryRepository;
+import com.sceptra.repository.TechnologyEntityRepository;
 import com.sceptra.repository.TechnologyPackageRepository;
-import com.sceptra.repository.TechnologyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -24,7 +24,7 @@ import java.util.*;
 public class RequirementService {
 
     @Autowired
-    TechnologyRepository technologyRepository;
+    TechnologyEntityRepository technologyRepository;
     @Autowired
     KeywordMap keywordMap;
     @Autowired

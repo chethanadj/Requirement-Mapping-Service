@@ -2,7 +2,7 @@ package com.sceptra.finder;
 
 import com.sceptra.model.TechnologyEntity;
 import com.sceptra.processor.requirement.KeywordMap;
-import com.sceptra.repository.TechnologyRepository;
+import com.sceptra.repository.TechnologyEntityRepository;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -25,7 +25,7 @@ public class ApacheLibraryDesc {
     @Autowired
     KeywordMap keywordMap;
     @Autowired
-    TechnologyRepository technologyRepository;
+    TechnologyEntityRepository technologyRepository;
     //    public static String TECH_TERMS_DEFINITION = TECH_TERMS_BASE + "/definition/";
 //    public static String TECH_TERMS_CATEGORY = TECH_TERMS_BASE + "/category/";
     private String name = "";

@@ -1,8 +1,6 @@
 package com.sceptra.service;
 
-import com.sceptra.domain.requirement.DefineWord;
-import com.sceptra.domain.requirement.Defined;
-import com.sceptra.domain.requirement.KeyWord;
+import com.sceptra.domain.requirement.*;
 import com.sceptra.finder.TechTermDesc;
 import com.sceptra.finder.WikiDesc;
 import com.sceptra.repository.DefineWordRepository;
@@ -73,9 +71,8 @@ public class KeyWordService {
             DefineWord tempWord = null;
             if (defineWordRepository.findByDescription(neighbours.get(a)) == null) {
                 tempWord = new DefineWord(neighbours.get(a));
-                tempWord = defineWordRepository.save(new DefineWord(neighbours.get(a)));
+                tempWord = defineWordRepository.save(tempWord);
             } else {
-                tempWord = defineWordRepository.findByDescription(neighbours.get(a));
                 tempWord = defineWordRepository.findByDescription(neighbours.get(a));
             }
             Float size = Float.valueOf(neighbours.size());
@@ -114,9 +111,8 @@ public class KeyWordService {
                 DefineWord tempWord = null;
                 if (defineWordRepository.findByDescription(neighbours.get(a)) == null) {
                     tempWord = new DefineWord(neighbours.get(a));
-                    tempWord = defineWordRepository.save(new DefineWord(neighbours.get(a)));
+                    tempWord = defineWordRepository.save(tempWord);
                 } else {
-                    tempWord = defineWordRepository.findByDescription(neighbours.get(a));
                     tempWord = defineWordRepository.findByDescription(neighbours.get(a));
                 }
                 Float size = Float.valueOf(neighbours.size());
@@ -130,17 +126,55 @@ public class KeyWordService {
 
     }
 
+    @RequestMapping(value = "keywordwithDesc", produces = "application/json", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    ResponseEntity<ArrayList<Defined>> addAKeyWord(
+            @RequestBody(required = true) Description wordWithDesc,
+            BindingResult result,
+            @RequestHeader HttpHeaders headers,
+            HttpServletRequest request) throws Exception {
+
+        KeyWord word;
+        ArrayList<String> neighbours = nlpServiceRequester.getCustomFilteredWordList(wordWithDesc.getDescription());
+        if (keyWordRepository.findByDescription(wordWithDesc.getWord()) != null) {
+            word = keyWordRepository.findByDescription(wordWithDesc.getWord());
+        } else {
+            word = new KeyWord(wordWithDesc.getWord().trim().toLowerCase());
+        }
+        KeyWord keyWord = keyWordRepository.save(word);
+        ArrayList<Defined> definers = new ArrayList<>();
+        for (int a = 0; a < neighbours.size(); a++) {
+
+            DefineWord tempWord = null;
+            if (defineWordRepository.findByDescription(neighbours.get(a)) == null) {
+                tempWord = new DefineWord(neighbours.get(a));
+                tempWord = defineWordRepository.save(tempWord);
+            } else {
+                tempWord = defineWordRepository.findByDescription(neighbours.get(a));
+            }
+            Float size = Float.valueOf(neighbours.size());
+            Float one = 1.0f;
+            definers.add(definedRelRepository.save(new Defined(keyWord, tempWord, (one / size))));
+
+        }
+
+        return new ResponseEntity(definers, HttpStatus.CREATED);
+
+    }
+
+
     @RequestMapping(value = "keywordcategory", produces = "application/json", method = RequestMethod.POST)
     public
     @ResponseBody
     ResponseEntity<ArrayList<KeyWord>> addByCategoryKeyWord(
-            @RequestBody(required = true) String category,
+            @RequestBody(required = true) Category category,
             BindingResult result,
             @RequestHeader HttpHeaders headers,
             HttpServletRequest request) throws Exception {
 
         ArrayList<KeyWord> keyWords = new ArrayList<>();
-        ArrayList<KeyWord> words = techTermDesc.getAllKeywords(category);
+        ArrayList<KeyWord> words = techTermDesc.getAllKeywords(category.getDescription());
         words.forEach(word -> {
             System.out.println(word);
             String keyWordDesc = techTermDesc.getDescription(word.getDescription());
