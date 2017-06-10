@@ -52,7 +52,7 @@ public class RequirementService {
                 history.setRequirement(para.getParagraph());
                 history.setKeyword(k);
                 history.setKeywordScore(v);
-                history.setRequiremetStems(stemList.toString());
+                history.setRequirementStems(stemList.toString());
                 historyRepository.save(history);
                 System.out.println("Requirement Added to history : " + history.toString());
 

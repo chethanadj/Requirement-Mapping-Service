@@ -19,14 +19,14 @@ public class RequirementHistory {
         return "RequirementHistory{" +
                 "id=" + id +
                 ", requirement='" + requirement + '\'' +
-                ", requiremetStems='" + requiremetStems + '\'' +
+                ", requirementStems='" + requirementStems + '\'' +
                 ", keyword='" + keyword + '\'' +
                 ", keywordScore=" + keywordScore +
                 ", acceptance=" + acceptance +
                 '}';
     }
 
-    private String requiremetStems;
+    private String requirementStems;
 
     public Integer getId() {
         return id;
@@ -44,12 +44,12 @@ public class RequirementHistory {
         this.requirement = requirement;
     }
 
-    public String getRequiremetStems() {
-        return requiremetStems;
+    public String getRequirementStems() {
+        return requirementStems;
     }
 
-    public void setRequiremetStems(String requiremetStems) {
-        this.requiremetStems = requiremetStems;
+    public void setRequirementStems(String requirementStems) {
+        this.requirementStems = requirementStems;
     }
 
     public String getKeyword() {
