@@ -14,7 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
+import java.util.List;
 
 
 @RestController
@@ -32,13 +32,13 @@ public class RequirementHistoryService {
     @RequestMapping(value = "oldrecords", produces = "application/json", method = RequestMethod.POST)
     public
     @ResponseBody
-    ResponseEntity<ArrayList<RequirementHistory>> addKeyWord(
+    ResponseEntity<List<RequirementHistory>> addKeyWord(
             @RequestBody(required = true) Requirement para,
             BindingResult result,
             @RequestHeader HttpHeaders headers,
             HttpServletRequest request) throws Exception {
 
-        ArrayList<RequirementHistory> output = requirementHistoryRepository.find(para.getParagraph());
+         List<RequirementHistory> output = requirementHistoryRepository.find(para.getParagraph());
 
         return new ResponseEntity(output, HttpStatus.FOUND);
 
