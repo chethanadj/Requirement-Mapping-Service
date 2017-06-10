@@ -15,12 +15,9 @@ public class NLPServiceRequester {
 
     public static String NLPSERVICEURI = "http://127.0.0.1:5000/getwordlist";
 
-//    @Autowired
-//    HTTPRequester requester;
-
     public ArrayList<String> getCustomFilteredWordList(String description) {
 
-        HTTPRequester requester=new HTTPRequester();
+        HTTPRequester requester = new HTTPRequester();
         ArrayList<String> wordList = new ArrayList<>();
         JsonObject json = new JsonObject();
         json.addProperty("description", description);
@@ -33,16 +30,12 @@ public class NLPServiceRequester {
 
         }
         String entityString = "";
-        try
-
-        {
+        try {
             entityString = EntityUtils.toString(entity);
         } catch (ParseException e) {
             entityString = "[]";
-//            e.printStackTrace();
         } catch (Exception e) {
             entityString = "[]";
-//            e.printStackTrace();
         } finally {
             requester.closeConn();
         }

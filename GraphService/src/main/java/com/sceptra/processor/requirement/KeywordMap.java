@@ -6,9 +6,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.sceptra.domain.requirement.DefineWord;
 import com.sceptra.domain.requirement.KeyWord;
-import com.sceptra.processor.Tagger;
 import com.sceptra.repository.DefineWordRepository;
-import com.sceptra.repository.DefinedRelRepository;
 import com.sceptra.repository.KeyWordRepository;
 import com.sceptra.requestor.HTTPRequester;
 import com.sceptra.requestor.NLPServiceRequester;
@@ -29,26 +27,17 @@ public class KeywordMap {
 
     @Autowired
     DefineWordRepository defineWordRepository;
-
     @Autowired
     KeyWordRepository keyWordRepository;
-
     @Autowired
     HTTPRequester requester;
-
     @Autowired
     NLPServiceRequester nlpServiceRequester;
 
-    @Autowired
-    DefinedRelRepository definedRelRepository;
 
-    Tagger tagger = new Tagger();
-
-
-    public Map<String, Double> getParents(String para) {
+    public Map<String, Double> getParents(ArrayList<String> words) {
         Map<String, Double> keywordMap = new HashMap<>();
         final boolean[] iskeyword = {false};
-        ArrayList<String> words = nlpServiceRequester.getCustomFilteredWordList(para);
         final Double[] totalCount = {0.0};
 
         if (words != null && words.size() == 1)
@@ -127,17 +116,16 @@ public class KeywordMap {
 
             });
 
-//        keywordMap.forEach((k, v) -> {
-//
-//            keywordMap.put(k, v / totalCount[0]);
-//
-//        });
-
-
         return keywordMap.entrySet().stream()
                 .sorted(Map.Entry.comparingByValue())
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
                         (e1, e2) -> e1, LinkedHashMap::new));
     }
 
+    public ArrayList<String> getStemList(String para) {
+        ArrayList<String> words = new ArrayList<>();
+        words = nlpServiceRequester.getCustomFilteredWordList(para);
+        words.sort((p1, p2) -> p1.compareTo(p2));
+        return words;
+    }
 }

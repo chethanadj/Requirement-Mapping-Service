@@ -72,7 +72,9 @@ public class ApacheLibraryDesc {
                 name = json.getString("name");
 
             if (programming_language.toLowerCase().contains("java") && category.toLowerCase().contains("library")) {
-                Map<String, Double> keywordUsage = keywordMap.getParents(description);
+
+                ArrayList<String> stemList = keywordMap.getStemList(description);
+                Map<String, Double> keywordUsage = keywordMap.getParents(stemList);
                 Double threshold = getThreshold(keywordUsage);
                 keywordUsage.forEach((k, v) -> {
                     if (v >= threshold) {
