@@ -1,8 +1,6 @@
 package com.sceptra.domain.requirement;
 
-/**
- * Created by chiranz on 6/8/17.
- */
+
 public class Requirement {
     String paragraph;
 

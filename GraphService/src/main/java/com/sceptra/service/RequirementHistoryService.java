@@ -29,17 +29,17 @@ public class RequirementHistoryService {
     @RequestMapping(value = base,
             produces = "application/json",
             method = RequestMethod.POST)
-    public
-    @ResponseBody
+    public @ResponseBody
     ResponseEntity<List<RequirementHistory>> getOldSimillarRecords(
             @RequestBody(required = true) Requirement requirement,
             BindingResult result,
             @RequestHeader HttpHeaders headers,
             HttpServletRequest request) throws Exception {
 
-        List<RequirementHistory> output = requirementHistoryRepository
-                .find(requirement.getParagraph());
-        return new ResponseEntity(output, HttpStatus.FOUND);
+        String requirementParagraph = requirement.getParagraph();
+        List<RequirementHistory> requirementHistories = requirementHistoryRepository
+                .find(requirementParagraph);
+        return new ResponseEntity(requirementHistories, HttpStatus.FOUND);
 
     }
 
@@ -54,14 +54,13 @@ public class RequirementHistoryService {
             @RequestHeader HttpHeaders headers,
             HttpServletRequest request) throws Exception {
 
-        List<RequirementHistory> output = requirementHistoryRepository
+        List<RequirementHistory> requirementHistories = requirementHistoryRepository
                 .find(requirement.getParagraph());
 
         Map<String, Integer> distanceMap = new HashMap<>();
 
-        for (RequirementHistory history : output) {
+        for (RequirementHistory history : requirementHistories) {
             Integer distance = distanceMap.get(history.getRequirement());
-
             if (distance == null) {
 
                 distance = levenshteinDistance
@@ -70,7 +69,6 @@ public class RequirementHistoryService {
                 distanceMap.put(history.getRequirement(), distance);
             }
         }
-
 
         return new ResponseEntity(distanceMap, HttpStatus.FOUND);
 

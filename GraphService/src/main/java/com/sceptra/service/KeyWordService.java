@@ -37,13 +37,9 @@ public class KeyWordService {
             method = RequestMethod.GET)
     public
     @ResponseBody
-    ResponseEntity<Iterable<KeyWord>> getAllKeyWord(
+    ResponseEntity<ArrayList<KeyWord>> getAllKeyWord(
             @RequestHeader HttpHeaders headers,
             HttpServletRequest request) throws Exception {
-
-        KeyWord person = new KeyWord("abc");
-
-        keyWordRepository.save(person);
 
         return new ResponseEntity(keyWordRepository.findAll(), HttpStatus.FOUND);
 
@@ -78,14 +74,17 @@ public class KeyWordService {
             method = RequestMethod.POST)
     public
     @ResponseBody
-    ResponseEntity<ArrayList<KeyWord>> addBatchKeyWord(
+    ResponseEntity<ArrayList<Defined>> addBatchKeyWord(
             @RequestBody(required = true) ArrayList<KeyWord> words,
             BindingResult result,
             @RequestHeader HttpHeaders headers,
             HttpServletRequest request) throws Exception {
 
+        ArrayList<Defined> definedArrayList = new ArrayList<>();
         ArrayList<KeyWord> keyWords = new ArrayList<>();
-        words.forEach(word -> {
+
+        for (KeyWord word : words) {
+
             String keyWordDesc = techTermDesc.getDescription(word.getDescription());
             System.out.println(keyWordDesc);
             ArrayList<String> neighbours = nlpServiceRequester
@@ -95,25 +94,11 @@ public class KeyWordService {
             }
             KeyWord keyWord = keyWordRepository.save(word);
             keyWords.add(keyWord);
-            for (int a = 0; a < neighbours.size(); a++) {
+            ArrayList<Defined> savedDefinedArrayList1 = saveNeighbours(neighbours, keyWord);
+            definedArrayList.addAll(savedDefinedArrayList1);
+        }
 
-                DefineWord tempWord = null;
-                if (defineWordRepository.findByDescription(neighbours.get(a)) == null) {
-                    tempWord = new DefineWord(neighbours.get(a));
-                    tempWord = defineWordRepository.save(tempWord);
-                } else {
-                    tempWord = defineWordRepository
-                            .findByDescription(neighbours.get(a));
-                }
-                Float size = Float.valueOf(neighbours.size());
-                Float one = 1.0f;
-                definedRelRepository
-                        .save(new Defined(keyWord, tempWord, (one / size)));
-
-            }
-        });
-
-        return new ResponseEntity(keyWords, HttpStatus.CREATED);
+        return new ResponseEntity(definedArrayList, HttpStatus.CREATED);
 
     }
 

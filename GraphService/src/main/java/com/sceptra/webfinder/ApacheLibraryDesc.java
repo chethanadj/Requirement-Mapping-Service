@@ -126,7 +126,7 @@ public class ApacheLibraryDesc {
         ArrayList<String> techList = getTechnologyList();
         techList.forEach(tech -> {
                     try {
-                        System.out.println("Technology" + tech);
+                        System.out.println("Technology : " + tech);
                         output.addAll(getData(tech));
                     } catch (Exception e) {
                         e.printStackTrace();

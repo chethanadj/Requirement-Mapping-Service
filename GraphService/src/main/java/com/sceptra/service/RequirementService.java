@@ -115,17 +115,14 @@ public class RequirementService {
         HashSet<String> techNames = new HashSet();
         paraMap.forEach((k, v) -> {
 
-            if (v > 0.3) {
                 ArrayList<TechnologyEntity> temp = technologyRepository
                         .findByTechnologyUsages(k);
-
                 if (temp != null && !temp.isEmpty()) {
                     temp.forEach(technologyEntity -> {
                         techNames.add(technologyEntity.getTechnologyName());
                     });
 
                 }
-            }
 
         });
 

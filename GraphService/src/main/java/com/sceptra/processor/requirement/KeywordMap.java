@@ -37,27 +37,26 @@ public class KeywordMap {
 
     public Map<String, Double> getWordMap(ArrayList<String> words) {
         Map<String, Double> wordMap = new HashMap<>();
-        final boolean[] iskeyword = {false};
-        final Double[] totalCount = {0.0};
+        boolean iskeyword = false;
+        Double totalCount = 0.0;
 
         if (words != null && words.size() == 1)
-            words.forEach(word -> {
+            for (String word : words) {
                 KeyWord keyword1 = keyWordRepository.findByDescription(word);
                 if (keyword1 != null) {
-                    totalCount[0] += 1.0;
-                    iskeyword[0] = true;
+                    totalCount += 1.0;
+                    iskeyword = true;
                     if (wordMap.get((keyword1.getDescription())) == null) {
-                        wordMap.put(keyword1.getDescription(), 1.0 / totalCount[0]);
+                        wordMap.put(keyword1.getDescription(), 1.0 / totalCount);
                     } else {
-                        Double integer = wordMap.get((keyword1.getDescription())) * (totalCount[0] - 1);
-                        wordMap.put(keyword1.getDescription(), (integer + 1) / totalCount[0]);
+                        Double integer = wordMap.get((keyword1.getDescription())) * (totalCount - 1);
+                        wordMap.put(keyword1.getDescription(), (integer + 1) / totalCount);
                     }
                 }
-            });
-        if (!iskeyword[0])
-            words.forEach(word -> {
+            }
+        if (!iskeyword)
+            for (String word : words) {
                 DefineWord defineWord = defineWordRepository.findByDescription(word);
-
                 if (defineWord != null) {
 
                     String url = "http://localhost:7474/db/data/node/" + defineWord.getId() + "/relationships/all";
@@ -82,39 +81,40 @@ public class KeywordMap {
 
                     JsonParser parser = new JsonParser();
                     JsonArray jsonArray = parser.parse(entityString).getAsJsonArray();
-                    ArrayList<KeyWord> keywords = new ArrayList<KeyWord>();
+                    ArrayList<KeyWord> keywords = new ArrayList<>();
                     ArrayList<Double> ratios = new ArrayList<>();
 
-                    jsonArray.forEach(jsonElement -> {
-                        JsonObject object = jsonElement.getAsJsonObject();
+                    for(int a=0;a<jsonArray.size();a++) {
+
+                        JsonObject object =  jsonArray.get(a).getAsJsonObject();
                         String node = object.get("end").getAsString().split("/")[6];
                         Long id = Long.parseLong(node);
                         KeyWord keyword = keyWordRepository.findOne(id);
                         keywords.add(keyword);
                         ratios.add(object.get("data").getAsJsonObject().get("definedRatio").getAsDouble());
-                    });
-//                    totalCount[0] = 0.0;
-                    final int[] index = {0};
+                    }
+
+                    int index = 0;
                     if (keywords != null) {
-                        keywords.forEach(defined -> {
+                        for (KeyWord defined : keywords) {
 
                             if (defined.getDescription() != null) {
-                                totalCount[0] += 1.0;
+                                totalCount += 1.0;
                                 System.out.println(defined.toString());
                                 if (wordMap.get((defined.getDescription())) == null) {
-                                    wordMap.put(defined.getDescription(), ratios.get(index[0]++));
+                                    wordMap.put(defined.getDescription(), ratios.get(index++));
                                 } else {
                                     Double integer = wordMap.get((defined.getDescription()));
-                                    wordMap.put(defined.getDescription(), (integer + ratios.get(index[0]++)));
+                                    wordMap.put(defined.getDescription(),
+                                            (integer + ratios.get(index++)));
                                 }
                             }
 
-                        });
+                        }
                     }
                 }
 
-
-            });
+            }
 
         return wordMap.entrySet().stream()
                 .sorted(Map.Entry.comparingByValue())

@@ -1,7 +1,7 @@
 package com.sceptra.service;
 
-import com.sceptra.domain.technology.TechDetail;
 import com.sceptra.domain.requirement.KeyWord;
+import com.sceptra.domain.technology.TechDetail;
 import com.sceptra.domain.technology.TechnologyEntity;
 import com.sceptra.domain.technology.TechnologyPackage;
 import com.sceptra.repository.KeyWordRepository;

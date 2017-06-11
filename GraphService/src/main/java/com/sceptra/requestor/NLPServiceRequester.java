@@ -43,7 +43,11 @@ public class NLPServiceRequester {
 
             JsonParser parser = new JsonParser();
             JsonArray jsonArray = parser.parse(entityString).getAsJsonArray();
-            jsonArray.forEach(jsonElement -> wordList.add(jsonElement.getAsString()));
+            for (int a = 0; a < jsonArray.size(); a++) {
+                JsonObject jsonObject = jsonArray.get(a).getAsJsonObject();
+                String word = jsonObject.getAsString();
+                wordList.add(word);
+            }
 
             return wordList;
         }
