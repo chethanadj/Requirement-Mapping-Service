@@ -1,6 +1,6 @@
 package com.sceptra.repository;
 
-import com.sceptra.model.TechnologyEntity;
+import com.sceptra.domain.technology.TechnologyEntity;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.ArrayList;

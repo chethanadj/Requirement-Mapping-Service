@@ -1,13 +1,13 @@
 package com.sceptra.service;
 
-import com.sceptra.domain.developer.TechDetail;
+import com.sceptra.domain.technology.TechDetail;
 import com.sceptra.domain.requirement.KeyWord;
-import com.sceptra.finder.ApacheLibraryDesc;
-import com.sceptra.model.TechnologyEntity;
-import com.sceptra.model.TechnologyPackage;
+import com.sceptra.domain.technology.TechnologyEntity;
+import com.sceptra.domain.technology.TechnologyPackage;
 import com.sceptra.repository.KeyWordRepository;
 import com.sceptra.repository.TechnologyEntityRepository;
 import com.sceptra.repository.TechnologyPackageRepository;
+import com.sceptra.webfinder.ApacheLibraryDesc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -22,6 +22,7 @@ import java.util.ArrayList;
 @RestController
 public class TechnologyDetailService {
 
+    private final String base = "techdetail";
     @Autowired
     KeyWordRepository keyWordRepository;
     @Autowired
@@ -31,7 +32,9 @@ public class TechnologyDetailService {
     @Autowired
     ApacheLibraryDesc apacheLibraryDesc;
 
-    @RequestMapping(value = "techdetail", produces = "application/json", method = RequestMethod.POST)
+    @RequestMapping(value = base + "/add/apache",
+            produces = "application/json",
+            method = RequestMethod.POST)
     public
     @ResponseBody
     ResponseEntity<ArrayList<TechnologyEntity>> addBatchKeyWord(
@@ -42,21 +45,12 @@ public class TechnologyDetailService {
 
     }
 
-    @RequestMapping(value = "techdetailfromjson", produces = "application/json", method = RequestMethod.POST)
+    @RequestMapping(value = base + "/add",
+            produces = "application/json",
+            method = RequestMethod.POST)
     public
     @ResponseBody
-    ResponseEntity<ArrayList<TechnologyEntity>> addBatchKeyWordFromJson(
-            @RequestHeader HttpHeaders headers,
-            HttpServletRequest request) throws Exception {
-
-        return new ResponseEntity(apacheLibraryDesc.getListData(), HttpStatus.CREATED);
-
-    }
-
-    @RequestMapping(value = "addlibdata", produces = "application/json", method = RequestMethod.POST)
-    public
-    @ResponseBody
-    ResponseEntity<ArrayList<TechDetail>> addlibraryDetail(
+    ResponseEntity<TechDetail> addLibraryDetail(
             @RequestBody(required = true) TechDetail techDetail,
             BindingResult result,
             @RequestHeader HttpHeaders headers,
@@ -67,12 +61,14 @@ public class TechnologyDetailService {
         entity.setTechnologyUsages(techDetail.getUsage());
         KeyWord keyword = keyWordRepository.findByDescription(techDetail.getUsage());
 
-
         ArrayList<TechnologyEntity> data1 = entityRepository.findByTechnologyUsagesAndTechnologyName(techDetail.getUsage(), techDetail.getName());
 
         if (keyword != null && data1 != null && !data1.isEmpty()) {
 
             entityRepository.save(entity);
+        } else {
+
+            return new ResponseEntity(techDetail, HttpStatus.UNAUTHORIZED);
         }
         TechnologyPackage technologyPackage = new TechnologyPackage();
         technologyPackage.setTechnologyName(techDetail.getName());
@@ -82,9 +78,12 @@ public class TechnologyDetailService {
         if (data2 != null && !data2.isEmpty()) {
 
             packageRepository.save(technologyPackage);
+        } else {
+            return new ResponseEntity(techDetail, HttpStatus.FOUND);
+
         }
 
-        return new ResponseEntity(apacheLibraryDesc.getListData(), HttpStatus.CREATED);
+        return new ResponseEntity(techDetail, HttpStatus.CREATED);
 
     }
 

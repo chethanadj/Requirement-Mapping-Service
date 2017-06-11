@@ -35,8 +35,8 @@ public class KeywordMap {
     NLPServiceRequester nlpServiceRequester;
 
 
-    public Map<String, Double> getParents(ArrayList<String> words) {
-        Map<String, Double> keywordMap = new HashMap<>();
+    public Map<String, Double> getWordMap(ArrayList<String> words) {
+        Map<String, Double> wordMap = new HashMap<>();
         final boolean[] iskeyword = {false};
         final Double[] totalCount = {0.0};
 
@@ -46,11 +46,11 @@ public class KeywordMap {
                 if (keyword1 != null) {
                     totalCount[0] += 1.0;
                     iskeyword[0] = true;
-                    if (keywordMap.get((keyword1.getDescription())) == null) {
-                        keywordMap.put(keyword1.getDescription(), 1.0 / totalCount[0]);
+                    if (wordMap.get((keyword1.getDescription())) == null) {
+                        wordMap.put(keyword1.getDescription(), 1.0 / totalCount[0]);
                     } else {
-                        Double integer = keywordMap.get((keyword1.getDescription())) * (totalCount[0] - 1);
-                        keywordMap.put(keyword1.getDescription(), (integer + 1) / totalCount[0]);
+                        Double integer = wordMap.get((keyword1.getDescription())) * (totalCount[0] - 1);
+                        wordMap.put(keyword1.getDescription(), (integer + 1) / totalCount[0]);
                     }
                 }
             });
@@ -101,11 +101,11 @@ public class KeywordMap {
                             if (defined.getDescription() != null) {
                                 totalCount[0] += 1.0;
                                 System.out.println(defined.toString());
-                                if (keywordMap.get((defined.getDescription())) == null) {
-                                    keywordMap.put(defined.getDescription(), ratios.get(index[0]++));
+                                if (wordMap.get((defined.getDescription())) == null) {
+                                    wordMap.put(defined.getDescription(), ratios.get(index[0]++));
                                 } else {
-                                    Double integer = keywordMap.get((defined.getDescription()));
-                                    keywordMap.put(defined.getDescription(), (integer + ratios.get(index[0]++)));
+                                    Double integer = wordMap.get((defined.getDescription()));
+                                    wordMap.put(defined.getDescription(), (integer + ratios.get(index[0]++)));
                                 }
                             }
 
@@ -116,7 +116,7 @@ public class KeywordMap {
 
             });
 
-        return keywordMap.entrySet().stream()
+        return wordMap.entrySet().stream()
                 .sorted(Map.Entry.comparingByValue())
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
                         (e1, e2) -> e1, LinkedHashMap::new));

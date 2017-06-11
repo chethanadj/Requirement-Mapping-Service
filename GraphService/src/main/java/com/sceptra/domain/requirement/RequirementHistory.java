@@ -1,4 +1,6 @@
-package com.sceptra.model;
+package com.sceptra.domain.requirement;
+
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,6 +14,8 @@ public class RequirementHistory {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Integer id;
+
+    @Length(max = 65000)
     private String requirement;
 
     @Override
@@ -26,6 +30,7 @@ public class RequirementHistory {
                 '}';
     }
 
+    @Length(max = 65000)
     private String requirementStems;
 
     public Integer getId() {

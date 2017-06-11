@@ -1,4 +1,4 @@
-package com.sceptra.processor;
+package com.sceptra.processor.nlp;
 
 /*******************************************************************************
  * Copyright (c) 2010 Haifeng Li

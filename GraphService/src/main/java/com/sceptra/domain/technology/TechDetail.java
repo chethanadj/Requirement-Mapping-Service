@@ -1,4 +1,4 @@
-package com.sceptra.domain.developer;
+package com.sceptra.domain.technology;
 
 /**
  * Created by chiranz on 6/10/17.

@@ -1,6 +1,6 @@
 package com.sceptra.repository;
 
-import com.sceptra.model.RequirementHistory;
+import com.sceptra.domain.requirement.RequirementHistory;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;

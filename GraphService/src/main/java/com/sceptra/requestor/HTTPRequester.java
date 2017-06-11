@@ -17,17 +17,15 @@ import java.io.UnsupportedEncodingException;
 public class HTTPRequester {
 
     private CloseableHttpClient httpclient;
-
     public HTTPRequester() {
-
         this.httpclient = HttpClients.createDefault();
-
     }
 
     public CloseableHttpResponse putRequest(String uri, String body) {
         RequestBuilder requestBuilder = null;
         try {
-            requestBuilder = RequestBuilder.put().setHeader("Content-Type", "application/json").setUri(uri)
+            requestBuilder = RequestBuilder.put()
+                    .setHeader("Content-Type", "application/json").setUri(uri)
                     .setEntity(new StringEntity(body));
         } catch (UnsupportedEncodingException e) {
             // TODO Auto-generated catch block
@@ -39,7 +37,8 @@ public class HTTPRequester {
     public CloseableHttpResponse postRequest(String uri, JsonObject body) {
         RequestBuilder requestBuilder = null;
         try {
-            requestBuilder = RequestBuilder.post().setHeader("Content-Type", "application/json").setUri(uri)
+            requestBuilder = RequestBuilder.post()
+                    .setHeader("Content-Type", "application/json").setUri(uri)
                     .setEntity(new StringEntity(body.toString()));
         } catch (UnsupportedEncodingException e) {
             // TODO Auto-generated catch block
@@ -54,14 +53,21 @@ public class HTTPRequester {
         byte[] plainCredsBytes = plainCreds.getBytes();
         byte[] base64CredsBytes = Base64.encodeBase64(plainCredsBytes);
         String base64Creds = new String(base64CredsBytes);
-
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Basic " + base64Creds);
-
-
         HttpUriRequest request = RequestBuilder.get()
-                .setUri(uri).addHeader("Authorization", "Basic " + base64Creds).build();
+                .setUri(uri)
+                .addHeader("Authorization", "Basic " + base64Creds).build();
         return execute(request);
+    }
+
+    public CloseableHttpResponse getPlainRequest(String uri){
+        HttpUriRequest request = RequestBuilder.get()
+                .setUri(uri)
+                .setHeader("Content-Type", "application/json").setUri(uri)
+                .build();
+        return execute(request);
+
     }
 
     private CloseableHttpResponse execute(HttpUriRequest request) {

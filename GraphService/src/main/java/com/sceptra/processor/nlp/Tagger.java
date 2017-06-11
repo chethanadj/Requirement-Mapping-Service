@@ -1,11 +1,12 @@
-package com.sceptra.processor;
+package com.sceptra.processor.nlp;
+
+import edu.stanford.nlp.tagger.maxent.MaxentTagger;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
-import edu.stanford.nlp.tagger.maxent.MaxentTagger;
 
 public class Tagger {
 

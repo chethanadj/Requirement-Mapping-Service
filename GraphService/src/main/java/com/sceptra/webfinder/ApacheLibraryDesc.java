@@ -1,6 +1,6 @@
-package com.sceptra.finder;
+package com.sceptra.webfinder;
 
-import com.sceptra.model.TechnologyEntity;
+import com.sceptra.domain.technology.TechnologyEntity;
 import com.sceptra.processor.requirement.KeywordMap;
 import com.sceptra.repository.TechnologyEntityRepository;
 import org.jsoup.Jsoup;
@@ -26,8 +26,6 @@ public class ApacheLibraryDesc {
     KeywordMap keywordMap;
     @Autowired
     TechnologyEntityRepository technologyRepository;
-    //    public static String TECH_TERMS_DEFINITION = TECH_TERMS_BASE + "/definition/";
-//    public static String TECH_TERMS_CATEGORY = TECH_TERMS_BASE + "/category/";
     private String name = "";
     private String category = "";
     private String description = "";
@@ -51,15 +49,11 @@ public class ApacheLibraryDesc {
         }
     }
 
-//    public static void main(String[] args) {
-//        new ApacheLibraryDesc().getTechnologyList();
-//    }
 
     public ArrayList<TechnologyEntity> getData(String librayName) throws Exception {
         ArrayList<TechnologyEntity> technologyEntityArrayList = new ArrayList();
         try {
             JSONObject json = new JSONObject(readUrl(APACHE_PROJECTS_BASE + librayName));
-//            System.out.println(json.toString());
             if (json.has("category"))
                 category = json.getString("category");
             if (json.has("description"))
@@ -74,7 +68,7 @@ public class ApacheLibraryDesc {
             if (programming_language.toLowerCase().contains("java") && category.toLowerCase().contains("library")) {
 
                 ArrayList<String> stemList = keywordMap.getStemList(description);
-                Map<String, Double> keywordUsage = keywordMap.getParents(stemList);
+                Map<String, Double> keywordUsage = keywordMap.getWordMap(stemList);
                 Double threshold = getThreshold(keywordUsage);
                 keywordUsage.forEach((k, v) -> {
                     if (v >= threshold) {
@@ -103,14 +97,10 @@ public class ApacheLibraryDesc {
 
         List<Double> list = new ArrayList<>(doubleMap.values());
         final Double[] total = {0.0};
-        Double numberOfElements = Double.valueOf(doubleMap.size());
         doubleMap.forEach((k, v) -> {
             total[0] += v;
-
         });
-
         int n = (int) Math.round(list.size() * 75 / 100);
-
         return list.get(n);
     }
 

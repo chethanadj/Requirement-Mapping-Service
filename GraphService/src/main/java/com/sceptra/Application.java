@@ -1,13 +1,13 @@
-
 package com.sceptra;
 
-import com.sceptra.finder.ApacheLibraryDesc;
-import com.sceptra.finder.TechTermDesc;
-import com.sceptra.finder.WikiDesc;
-import com.sceptra.processor.Tagger;
+import com.sceptra.processor.nlp.Tagger;
 import com.sceptra.processor.requirement.KeywordMap;
+import com.sceptra.processor.requirement.LevenshteinDistance;
 import com.sceptra.requestor.HTTPRequester;
 import com.sceptra.requestor.NLPServiceRequester;
+import com.sceptra.webfinder.ApacheLibraryDesc;
+import com.sceptra.webfinder.TechTermDesc;
+import com.sceptra.webfinder.WikiDesc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -23,50 +23,56 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableNeo4jRepositories
 public class Application {
 
-	private final static Logger log = LoggerFactory.getLogger(Application.class);
+    private final static Logger log = LoggerFactory.getLogger(Application.class);
 
-	public static void main(String[] args) throws Exception {
-		SpringApplication.run(Application.class, args);
-	}
+    public static void main(String[] args) throws Exception {
+        SpringApplication.run(Application.class, args);
+    }
 
-	@Bean
-	NLPServiceRequester getNLPServiceRequester(){
+    @Bean
+    NLPServiceRequester getNLPServiceRequester() {
 
-		return new NLPServiceRequester();
-	}
+        return new NLPServiceRequester();
+    }
 
-	@Bean
-	TechTermDesc getTechTermDesc(){
+    @Bean
+    TechTermDesc getTechTermDesc() {
 
-		return new TechTermDesc();
-	}
+        return new TechTermDesc();
+    }
 
-	@Bean
-	HTTPRequester getHTTPRequester(){
+    @Bean
+    HTTPRequester getHTTPRequester() {
 
-		return new HTTPRequester();
-	}
+        return new HTTPRequester();
+    }
 
-	@Bean
-	WikiDesc getWikiDesc(){
+    @Bean
+    WikiDesc getWikiDesc() {
 
-		return new WikiDesc();
-	}
+        return new WikiDesc();
+    }
 
-	@Bean
-	KeywordMap getKeywordMap(){
+    @Bean
+    KeywordMap getKeywordMap() {
 
-		return new KeywordMap();
-	}
+        return new KeywordMap();
+    }
 
-	@Bean
-	Tagger getTagger(){
+    @Bean
+    Tagger getTagger() {
 
-		return new Tagger();
-	}
+        return new Tagger();
+    }
 
-	@Bean
-	ApacheLibraryDesc getApacheLibraryDesc(){
-		return new ApacheLibraryDesc();
-	}
+    @Bean
+    ApacheLibraryDesc getApacheLibraryDesc() {
+        return new ApacheLibraryDesc();
+    }
+
+    @Bean
+    LevenshteinDistance getLevenshteinDistance() {
+
+        return new LevenshteinDistance();
+    }
 }

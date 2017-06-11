@@ -1,4 +1,4 @@
-package com.sceptra.model;
+package com.sceptra.domain.technology;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

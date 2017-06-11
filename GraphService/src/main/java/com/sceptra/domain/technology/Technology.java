@@ -1,4 +1,4 @@
-package com.sceptra.domain.developer;
+package com.sceptra.domain.technology;
 
 import java.util.Map;
 

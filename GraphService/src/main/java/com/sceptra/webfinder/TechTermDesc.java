@@ -1,4 +1,4 @@
-package com.sceptra.finder;
+package com.sceptra.webfinder;
 
 import com.sceptra.domain.requirement.KeyWord;
 import org.jsoup.Jsoup;
@@ -63,7 +63,6 @@ public class TechTermDesc {
         return response;
 
     }
-
 
     private ArrayList<String> getCustomList() {
 

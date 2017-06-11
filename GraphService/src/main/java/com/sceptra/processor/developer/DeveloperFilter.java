@@ -1,7 +1,7 @@
 package com.sceptra.processor.developer;
 
 import com.sceptra.domain.developer.Developer;
-import com.sceptra.domain.developer.Technology;
+import com.sceptra.domain.technology.Technology;
 
 import java.util.ArrayList;
 import java.util.HashMap;
