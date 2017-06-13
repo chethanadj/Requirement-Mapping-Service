@@ -63,7 +63,7 @@ public class TechnologyDetailService {
 
         ArrayList<TechnologyEntity> data1 = entityRepository.findByTechnologyUsagesAndTechnologyName(techDetail.getUsage(), techDetail.getName());
 
-        if (keyword != null && data1 != null && !data1.isEmpty()) {
+        if (keyword != null && data1 != null && data1.isEmpty()) {
 
             entityRepository.save(entity);
         } else {
@@ -75,7 +75,7 @@ public class TechnologyDetailService {
         technologyPackage.setTechnologyPackage(techDetail.getMainPackages());
 
         ArrayList<TechnologyPackage> data2 = packageRepository.findByTechnologyNameAndTechnologyPackage(techDetail.getName(), techDetail.getMainPackages());
-        if (data2 != null && !data2.isEmpty()) {
+        if (data2 != null && data2.isEmpty()) {
 
             packageRepository.save(technologyPackage);
         } else {

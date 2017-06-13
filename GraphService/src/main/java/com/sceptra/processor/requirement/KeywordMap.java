@@ -48,10 +48,7 @@ public class KeywordMap {
                     iskeyword = true;
                     if (wordMap.get((keyword1.getDescription())) == null) {
                         wordMap.put(keyword1.getDescription(), 1.0 / totalCount);
-                    } else {
-                        Double integer = wordMap.get((keyword1.getDescription())) * (totalCount - 1);
-                        wordMap.put(keyword1.getDescription(), (integer + 1) / totalCount);
-                    }
+                    } 
                 }
             }
         if (!iskeyword)
