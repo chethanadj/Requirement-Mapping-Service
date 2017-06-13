@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -15,6 +16,6 @@ public interface RequirementHistoryRepository extends CrudRepository<Requirement
             value = "CALL searchrequirements(:paragraph)")
     List<RequirementHistory> find(@Param("paragraph") String paragraph);
 
-    RequirementHistory findByRequirement(String requirement);
+    ArrayList<RequirementHistory> findByRequirement(String requirement);
 
 }

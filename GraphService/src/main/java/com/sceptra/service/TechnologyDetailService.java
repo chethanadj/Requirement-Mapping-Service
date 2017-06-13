@@ -59,24 +59,24 @@ public class TechnologyDetailService {
         TechnologyEntity entity = new TechnologyEntity();
         entity.setTechnologyName(techDetail.getName());
         entity.setTechnologyUsages(techDetail.getUsage());
-        KeyWord keyword = keyWordRepository.findByDescription(techDetail.getUsage());
+        KeyWord keyword = keyWordRepository.findByDescription(techDetail.getUsage().toString());
 
-        ArrayList<TechnologyEntity> data1 = entityRepository.findByTechnologyUsagesAndTechnologyName(techDetail.getUsage(), techDetail.getName());
+        ArrayList<TechnologyEntity> data1 = entityRepository
+                .findByTechnologyUsagesAndTechnologyName(techDetail.getUsage(), techDetail.getName());
 
-        if (keyword != null && data1 != null && !data1.isEmpty()) {
+        if (keyword != null && data1 != null && data1.isEmpty()) {
 
             entityRepository.save(entity);
         } else {
-
             return new ResponseEntity(techDetail, HttpStatus.UNAUTHORIZED);
         }
         TechnologyPackage technologyPackage = new TechnologyPackage();
         technologyPackage.setTechnologyName(techDetail.getName());
         technologyPackage.setTechnologyPackage(techDetail.getMainPackages());
 
-        ArrayList<TechnologyPackage> data2 = packageRepository.findByTechnologyNameAndTechnologyPackage(techDetail.getName(), techDetail.getMainPackages());
-        if (data2 != null && !data2.isEmpty()) {
-
+        ArrayList<TechnologyPackage> data2 = packageRepository
+                .findByTechnologyNameAndTechnologyPackage(techDetail.getName(), techDetail.getMainPackages());
+        if (data2 != null && data2.isEmpty()) {
             packageRepository.save(technologyPackage);
         } else {
             return new ResponseEntity(techDetail, HttpStatus.FOUND);
