@@ -1,6 +1,5 @@
 package com.sceptra.service;
 
-import com.sceptra.domain.requirement.KeyWord;
 import com.sceptra.domain.requirement.Requirement;
 import com.sceptra.domain.requirement.RequirementHistory;
 import com.sceptra.domain.technology.TechnologyEntity;
@@ -33,20 +32,65 @@ public class RequirementService {
     @Autowired
     RequirementHistoryRepository historyRepository;
 
+    @RequestMapping(value = base,
+            produces = "application/json",
+            method = RequestMethod.POST)
+    public
+    @ResponseBody
+    ResponseEntity<Map<String, Double>> getKeywords(
+            @RequestBody(required = true) Requirement requirement,
+            BindingResult result,
+            @RequestHeader HttpHeaders headers,
+            HttpServletRequest request) throws Exception {
+
+        ArrayList<RequirementHistory> requirementHistoryList = historyRepository
+                .findByRequirement(requirement.getParagraph());
+        RequirementHistory requirementHistory = null;
+        if (requirementHistoryList != null && requirementHistoryList.size() >= 1) {
+            requirementHistory = requirementHistoryList.get(0);
+        }
+
+        ArrayList<String> stemList = keywordMap
+                .getStemList(requirement.getParagraph());
+        Map<String, Double> wordMap = keywordMap.getWordMap(stemList);
+        if (requirementHistory == null) {
+
+            wordMap.forEach((k, v) -> {
+                RequirementHistory history = new RequirementHistory();
+                history.setRequirement(requirement.getParagraph());
+                history.setKeyword(k);
+                history.setKeywordScore(v);
+                history.setRequirementStems(stemList.toString());
+                historyRepository.save(history);
+                System.out.println("Requirement Added to history : " + history.toString());
+
+            });
+
+        }
+
+        return new ResponseEntity(wordMap, HttpStatus.FOUND);
+
+    }
+
     @RequestMapping(value = base + "/{topPercentage}",
             produces = "application/json",
             method = RequestMethod.POST)
     public
     @ResponseBody
-    ResponseEntity<KeyWord> addKeyWord(
+    ResponseEntity<Map<String, Double>> getTopKeywordsWord(
             @PathVariable("topPercentage") Integer value,
             @RequestBody(required = true) Requirement requirement,
             BindingResult result,
             @RequestHeader HttpHeaders headers,
             HttpServletRequest request) throws Exception {
 
-        RequirementHistory requirementHistory = historyRepository
+        ArrayList<RequirementHistory> requirementHistoryList = historyRepository
                 .findByRequirement(requirement.getParagraph());
+        RequirementHistory requirementHistory = null;
+        if (requirementHistoryList != null && requirementHistoryList.size() >= 1) {
+            requirementHistory = requirementHistoryList.get(0);
+        }
+
         ArrayList<String> stemList = keywordMap
                 .getStemList(requirement.getParagraph());
         Map<String, Double> wordMap = keywordMap.getWordMap(stemList);
@@ -115,14 +159,14 @@ public class RequirementService {
         HashSet<String> techNames = new HashSet();
         paraMap.forEach((k, v) -> {
 
-                ArrayList<TechnologyEntity> temp = technologyRepository
-                        .findByTechnologyUsages(k);
-                if (temp != null && !temp.isEmpty()) {
-                    temp.forEach(technologyEntity -> {
-                        techNames.add(technologyEntity.getTechnologyName());
-                    });
+            ArrayList<TechnologyEntity> temp = technologyRepository
+                    .findByTechnologyUsages(k);
+            if (temp != null && !temp.isEmpty()) {
+                temp.forEach(technologyEntity -> {
+                    techNames.add(technologyEntity.getTechnologyName());
+                });
 
-                }
+            }
 
         });
 

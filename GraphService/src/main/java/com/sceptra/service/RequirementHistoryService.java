@@ -12,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -86,8 +87,13 @@ public class RequirementHistoryService {
             HttpServletRequest request) throws Exception {
 
         if (requirementHistory.getAcceptance() != null) {//
-            RequirementHistory requirement1 = requirementHistoryRepository
+            ArrayList<RequirementHistory> requirementHistoryList = requirementHistoryRepository
                     .findByRequirement(requirementHistory.getRequirement());
+            RequirementHistory requirement1 = null;
+
+            if (requirementHistoryList != null && requirementHistoryList.size() >= 1) {
+                requirement1 = requirementHistoryList.get(1);
+            }
 
             if (requirement1 == null) {
                 return new ResponseEntity(requirementHistory, HttpStatus.NOT_FOUND);
