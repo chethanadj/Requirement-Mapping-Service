@@ -2,8 +2,10 @@ package com.sceptra.service;
 
 import com.sceptra.domain.requirement.Requirement;
 import com.sceptra.domain.requirement.RequirementHistory;
+import com.sceptra.domain.technology.Technology;
 import com.sceptra.domain.technology.TechnologyEntity;
 import com.sceptra.domain.technology.TechnologyPackage;
+import com.sceptra.processor.developer.DeveloperFilter;
 import com.sceptra.processor.requirement.KeywordMap;
 import com.sceptra.repository.RequirementHistoryRepository;
 import com.sceptra.repository.TechnologyEntityRepository;
@@ -31,6 +33,8 @@ public class RequirementService {
     TechnologyPackageRepository technologyPackageRepository;
     @Autowired
     RequirementHistoryRepository historyRepository;
+    @Autowired
+    DeveloperFilter filter;
 
     @RequestMapping(value = base,
             produces = "application/json",
@@ -126,6 +130,10 @@ public class RequirementService {
             HttpServletRequest request) throws Exception {
 
         ArrayList<String> stemList = keywordMap.getStemList(para.getParagraph());
+        if (stemList.size() == 1) {
+            stemList.clear();
+            stemList.add(para.getParagraph().trim().toLowerCase());
+        }
         Map<String, Double> paraMap = keywordMap.getWordMap(stemList);
         HashSet<String> techNames = getTechNamesForTerms(paraMap);
         HashSet<String> packages = getPackagesforTechNames(techNames);
@@ -138,7 +146,7 @@ public class RequirementService {
             method = RequestMethod.POST)
     public
     @ResponseBody
-    ResponseEntity<HashSet<String>> findTopPackagesForRequirement(
+    ResponseEntity<HashSet<String>> findPackagesForFilteredRequirement(
             @PathVariable("topPercentage") Integer value,
             @RequestBody(required = true) Requirement para,
             BindingResult result,
@@ -146,11 +154,66 @@ public class RequirementService {
             HttpServletRequest request) throws Exception {
 
         ArrayList<String> stemList = keywordMap.getStemList(para.getParagraph());
+        if (stemList.size() == 1) {
+            stemList.clear();
+            stemList.add(para.getParagraph().trim().toLowerCase());
+        }
         Map<String, Double> wordMap = keywordMap.getWordMap(stemList);
         Map<String, Double> listFromThreshold = getFilteredListFromThreshold(wordMap, value);
         HashSet<String> techNames = getTechNamesForTerms(listFromThreshold);
         HashSet<String> packages = getPackagesforTechNames(techNames);
         return new ResponseEntity(packages, HttpStatus.FOUND);
+
+    }
+
+
+    @RequestMapping(value = base + "/users",
+            produces = "application/json",
+            method = RequestMethod.POST)
+    public
+    @ResponseBody
+    ResponseEntity<ArrayList<Technology>> findUsersForRequirement(
+            @RequestBody(required = true) Requirement para,
+            BindingResult result,
+            @RequestHeader HttpHeaders headers,
+            HttpServletRequest request) throws Exception {
+
+        ArrayList<String> stemList = keywordMap.getStemList(para.getParagraph());
+        if (stemList.size() == 1) {
+            stemList.clear();
+            stemList.add(para.getParagraph().trim().toLowerCase());
+        }
+        Map<String, Double> paraMap = keywordMap.getWordMap(stemList);
+        HashSet<String> techNames = getTechNamesForTerms(paraMap);
+        HashSet<String> packages = getPackagesforTechNames(techNames);
+        Map<String, ArrayList<Technology>> userList = filter.getDeveloperList(packages);
+        return new ResponseEntity(userList, HttpStatus.FOUND);
+
+    }
+
+    @RequestMapping(value = base + "/users/{topPercentage}",
+            produces = "application/json",
+            method = RequestMethod.POST)
+    public
+    @ResponseBody
+    ResponseEntity<Map<String, ArrayList<Technology>>> findUsersForTopFilteredRequirement(
+            @PathVariable("topPercentage") Integer value,
+            @RequestBody(required = true) Requirement para,
+            BindingResult result,
+            @RequestHeader HttpHeaders headers,
+            HttpServletRequest request) throws Exception {
+
+        ArrayList<String> stemList = keywordMap.getStemList(para.getParagraph());
+        if (stemList.size() == 1) {
+            stemList.clear();
+            stemList.add(para.getParagraph().trim().toLowerCase());
+        }
+        Map<String, Double> wordMap = keywordMap.getWordMap(stemList);
+        Map<String, Double> listFromThreshold = getFilteredListFromThreshold(wordMap, value);
+        HashSet<String> techNames = getTechNamesForTerms(listFromThreshold);
+        HashSet<String> packages = getPackagesforTechNames(techNames);
+        Map<String, ArrayList<Technology>> userList = filter.getDeveloperList(packages);
+        return new ResponseEntity(userList, HttpStatus.FOUND);
 
     }
 

@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-
 public class ApacheLibraryDesc {
 
     public static String APACHE_PROJECTS_BASE = "https://projects.apache.org/json/projects/";

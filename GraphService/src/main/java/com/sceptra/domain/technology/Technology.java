@@ -1,44 +1,41 @@
 package com.sceptra.domain.technology;
 
-import java.util.Map;
-
-
-
 public class Technology {
     String technologyName;
-    Map<String,Double> developerList;
-    double usage;
+    double presentage;
+    double overollQuality;
 
-    public String getTechnologyName() {
-        return technologyName;
+    public double getOverollQuality() {
+        return overollQuality;
+    }
+
+    public void setOverollQuality(double overollQuality) {
+        this.overollQuality = overollQuality;
     }
 
     @Override
     public String toString() {
         return "Technology{" +
                 "technologyName='" + technologyName + '\'' +
-                ", developerList=" + developerList +
-                ", usage=" + usage +
+                ", presentage=" + presentage +
+                ", overollQuality=" + overollQuality +
                 '}';
+
+    }
+
+    public String getTechnologyName() {
+        return technologyName;
     }
 
     public void setTechnologyName(String technologyName) {
         this.technologyName = technologyName;
     }
 
-    public Map<String, Double> getDeveloperList() {
-        return developerList;
+    public double getPresentage() {
+        return presentage;
     }
 
-    public void setDeveloperList(Map<String, Double> developerList) {
-        this.developerList = developerList;
-    }
-
-    public double getUsage() {
-        return usage;
-    }
-
-    public void setUsage(double usage) {
-        this.usage = usage;
+    public void setPresentage(double presentage) {
+        this.presentage = presentage;
     }
 }

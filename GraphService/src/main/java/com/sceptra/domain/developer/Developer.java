@@ -1,30 +1,38 @@
 package com.sceptra.domain.developer;
 
-import java.util.Map;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
-
+@Entity
 public class Developer {
 
-    String id;
-    double overollQuality;
-    Map<String,Double> technologyList;
+    Double overollQuality;
+    //    Map<String,Double> technologyList;
+    Double presentage;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     @Override
     public String toString() {
-        return "developer{" +
-                "id='" + id + '\'' +
-                ", overollQuality=" + overollQuality +
-                ", technologyList=" + technologyList +
+        return "Developer{" +
+                "overollQuality=" + overollQuality +
+                ", presentage=" + presentage +
+                ", name='" + name + '\'' +
+                ", technology='" + technology + '\'' +
+                ", id=" + id +
                 '}';
     }
 
-    public String getId() {
-        return id;
-    }
+    String name;
 
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public Double getOverollQuality() {
         return overollQuality;
@@ -34,11 +42,33 @@ public class Developer {
         this.overollQuality = overollQuality;
     }
 
-    public Map<String, Double> getTechnologyList() {
-        return technologyList;
+    public Double getPresentage() {
+        return presentage;
     }
 
-    public void setTechnologyList(Map<String, Double> technologyList) {
-        this.technologyList = technologyList;
+    public void setPresentage(Double presentage) {
+        this.presentage = presentage;
     }
-}
+
+    public String getTechnology() {
+        return technology;
+    }
+
+    public void setTechnology(String technology) {
+        this.technology = technology;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    String technology;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
+
+ }

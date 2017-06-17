@@ -1,6 +1,5 @@
 package com.sceptra.processor.requirement;
 
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -17,10 +16,7 @@ import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class KeywordMap {
@@ -98,9 +94,9 @@ public class KeywordMap {
                             if (defined.getDescription() != null) {
                                 totalCount += 1.0;
                                 System.out.println(defined.toString());
-                                if (wordMap.get((defined.getDescription())) == null) {
+                                if (wordMap.get((defined.getDescription())) == null) {//if keyword is not there add it
                                     wordMap.put(defined.getDescription(), ratios.get(index++));
-                                } else {
+                                } else {//if keyword is there update it
                                     Double integer = wordMap.get((defined.getDescription()));
                                     wordMap.put(defined.getDescription(),
                                             (integer + ratios.get(index++)));
@@ -125,4 +121,34 @@ public class KeywordMap {
         words.sort((p1, p2) -> p1.compareTo(p2));
         return words;
     }
+
+//    public LinkedHashMap<String,Double> sortHashMapByValues(
+//            HashMap<String, Double> passedMap) {
+//        List<String> mapKeys = new ArrayList(passedMap.keySet());
+//        List<Double> mapValues = new ArrayList(passedMap.values());
+//        Collections.sort(mapValues);
+//        Collections.sort(mapKeys);
+//
+//        LinkedHashMap<String, Double> sortedMap =
+//                new LinkedHashMap<>();
+//
+//        Iterator<Double> valueIt = mapValues.iterator();
+//        while (valueIt.hasNext()) {
+//            Double val = valueIt.next();
+//            Iterator<String> keyIt = mapKeys.iterator();
+//
+//            while (keyIt.hasNext()) {
+//                String key = keyIt.next();
+//                Double comp1 = passedMap.get(key);
+//                Double comp2 = val;
+//
+//                if (comp1.equals(comp2)) {
+//                    keyIt.remove();
+//                    sortedMap.put(key, val);
+//                    break;
+//                }
+//            }
+//        }
+//        return sortedMap;
+//    }
 }

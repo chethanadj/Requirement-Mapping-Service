@@ -10,7 +10,6 @@ import org.apache.http.util.EntityUtils;
 
 import java.util.ArrayList;
 
-
 public class NLPServiceRequester {
 
     public static String NLPSERVICEURI = "http://127.0.0.1:5000/getwordlist";

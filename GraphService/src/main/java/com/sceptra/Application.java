@@ -1,5 +1,6 @@
 package com.sceptra;
 
+import com.sceptra.processor.developer.DeveloperFilter;
 import com.sceptra.processor.nlp.Tagger;
 import com.sceptra.processor.requirement.KeywordMap;
 import com.sceptra.processor.requirement.LevenshteinDistance;
@@ -75,5 +76,10 @@ public class Application {
     LevenshteinDistance getLevenshteinDistance() {
 
         return new LevenshteinDistance();
+    }
+
+    @Bean
+    DeveloperFilter getDeveloperFilter() {
+        return new DeveloperFilter();
     }
 }
