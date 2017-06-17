@@ -10,6 +10,6 @@ import java.util.ArrayList;
  */
 public interface DeveloperRepository extends CrudRepository<Developer,String> {
 
-    ArrayList<Developer> findByNameAndTechnology(String name, String technology);
+    ArrayList<Developer> findByUsernameAndTechnology(String name, String technology);
     ArrayList<Developer> findByTechnology(String technology);
 }

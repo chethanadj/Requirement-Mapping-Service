@@ -10,28 +10,28 @@ public class Developer {
 
     Double overollQuality;
     //    Map<String,Double> technologyList;
-    Double presentage;
+    Double percentage;
 
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     @Override
     public String toString() {
         return "Developer{" +
                 "overollQuality=" + overollQuality +
-                ", presentage=" + presentage +
-                ", name='" + name + '\'' +
+                ", percentage=" + percentage +
+                ", username='" + username + '\'' +
                 ", technology='" + technology + '\'' +
                 ", id=" + id +
                 '}';
     }
 
-    String name;
+    String username;
 
 
     public Double getOverollQuality() {
@@ -42,12 +42,12 @@ public class Developer {
         this.overollQuality = overollQuality;
     }
 
-    public Double getPresentage() {
-        return presentage;
+    public Double getPercentage() {
+        return percentage;
     }
 
-    public void setPresentage(Double presentage) {
-        this.presentage = presentage;
+    public void setPercentage(Double percentage) {
+        this.percentage = percentage;
     }
 
     public String getTechnology() {

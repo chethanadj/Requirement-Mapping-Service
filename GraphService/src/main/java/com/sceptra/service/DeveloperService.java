@@ -33,7 +33,7 @@ public class DeveloperService {
             @RequestHeader HttpHeaders headers,
             HttpServletRequest request) throws Exception {
 
-        if (developer.getName() == null || developer.getTechnology() == null) {
+        if (developer.getUsername() == null || developer.getTechnology() == null) {
             return new ResponseEntity<Developer>(developer, HttpStatus.BAD_REQUEST);
         }
 
@@ -46,7 +46,7 @@ public class DeveloperService {
         }
 
         ArrayList<Developer> developers = developerRepository
-                .findByNameAndTechnology(developer.getName(), developer.getTechnology());
+                .findByUsernameAndTechnology(developer.getUsername(), developer.getTechnology());
 
         if (developers.size() > 0) {
             return new ResponseEntity(developers, HttpStatus.UNAUTHORIZED);

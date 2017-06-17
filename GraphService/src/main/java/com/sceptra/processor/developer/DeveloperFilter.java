@@ -27,10 +27,10 @@ public class DeveloperFilter {
             Double techMeanValue = getMeanvalueforTechnology(developersForTechnology);
 
             for (Developer developer : developersForTechnology) {
-                if (developer.getPresentage() != null) {
-                    developer.setPresentage(0.0);
+                if (developer.getPercentage() != null) {
+                    developer.setPercentage(0.0);
                 }
-                Double precentage = developer.getPresentage();
+                Double precentage = developer.getPercentage();
 
                 if (precentage >= techMeanValue) {
                     eligibleDevelopers.add(developer);
@@ -50,30 +50,31 @@ public class DeveloperFilter {
 
             ArrayList<Technology> technologies = null;
 
-            if (developer.getName() != null) {
-                technologies = developersMappedWithTechnology.get(developer.getName());
+            if (developer.getUsername() != null) {
+                technologies = developersMappedWithTechnology.get(developer.getUsername());
                 if (technologies == null) {
                     technologies = new ArrayList<>();
                 }
 
                 if (developer.getTechnology() != null) {
-                    if (developer.getPresentage() != null) {
-                        developer.setPresentage(0.0);
-                        Technology technology = new Technology();
-                        technology.setTechnologyName(developer.getTechnology());
-                        technology.setPresentage(technology.getPresentage());
-
-                        if (developer.getOverollQuality() == null) {
-                            developer.setOverollQuality(0.0);
-                        }
-                        technology.setOverollQuality(developer.getOverollQuality());
-                        technologies.add(technology);
-
+                    if (developer.getPercentage() == null) {
+                        developer.setPercentage(0.0);
                     }
+                    if (developer.getOverollQuality() == null) {
+                        developer.setOverollQuality(0.0);
+                    }
+                    Technology technology = new Technology();
+                    technology.setTechnologyName(developer.getTechnology());
+                    technology.setPresentage(technology.getPresentage());
+
+
+                    technology.setOverollQuality(developer.getOverollQuality());
+                    technologies.add(technology);
+
 
                 }
 
-                developersMappedWithTechnology.put(developer.getName(), technologies);
+                developersMappedWithTechnology.put(developer.getUsername(), technologies);
             }
         }
 
@@ -86,10 +87,10 @@ public class DeveloperFilter {
         Double developerCount = Double.valueOf(allDevelopers.size());
         Double techcount = 0.0;
         for (Developer developer : allDevelopers) {
-            if (developer.getPresentage() != null) {
-                developer.setPresentage(0.0);
+            if (developer.getPercentage() != null) {
+                developer.setPercentage(0.0);
             }
-            techcount += developer.getPresentage();
+            techcount += developer.getPercentage();
 
         }
 
