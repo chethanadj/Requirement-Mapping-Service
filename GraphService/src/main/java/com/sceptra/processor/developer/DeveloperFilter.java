@@ -57,18 +57,20 @@ public class DeveloperFilter {
                 }
 
                 if (developer.getTechnology() != null) {
+
                     if (developer.getPercentage() == null) {
                         developer.setPercentage(0.0);
                     }
-                    if (developer.getOverollQuality() == null) {
-                        developer.setOverollQuality(0.0);
+
+                    if (developer.getOverallQuality() == null) {
+                        developer.setOverallQuality(0.0);
                     }
                     Technology technology = new Technology();
                     technology.setTechnologyName(developer.getTechnology());
-                    technology.setPresentage(technology.getPresentage());
+                    technology.setPercentage(technology.getPercentage());
 
 
-                    technology.setOverollQuality(developer.getOverollQuality());
+                    technology.setOverallQuality(developer.getOverallQuality());
                     technologies.add(technology);
 
 

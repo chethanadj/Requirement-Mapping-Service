@@ -2,23 +2,23 @@ package com.sceptra.domain.technology;
 
 public class Technology {
     String technologyName;
-    double presentage;
-    double overollQuality;
+    double percentage;
+    double overallQuality;
 
-    public double getOverollQuality() {
-        return overollQuality;
+    public double getOverallQuality() {
+        return overallQuality;
     }
 
-    public void setOverollQuality(double overollQuality) {
-        this.overollQuality = overollQuality;
+    public void setOverallQuality(double overallQuality) {
+        this.overallQuality = overallQuality;
     }
 
     @Override
     public String toString() {
         return "Technology{" +
                 "technologyName='" + technologyName + '\'' +
-                ", presentage=" + presentage +
-                ", overollQuality=" + overollQuality +
+                ", percentage=" + percentage +
+                ", overallQuality=" + overallQuality +
                 '}';
 
     }
@@ -31,11 +31,11 @@ public class Technology {
         this.technologyName = technologyName;
     }
 
-    public double getPresentage() {
-        return presentage;
+    public double getPercentage() {
+        return percentage;
     }
 
-    public void setPresentage(double presentage) {
-        this.presentage = presentage;
+    public void setPercentage(double percentage) {
+        this.percentage = percentage;
     }
 }

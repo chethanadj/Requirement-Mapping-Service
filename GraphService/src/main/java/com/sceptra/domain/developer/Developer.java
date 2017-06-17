@@ -8,7 +8,7 @@ import javax.persistence.Id;
 @Entity
 public class Developer {
 
-    Double overollQuality;
+    Double overallQuality;
     //    Map<String,Double> technologyList;
     Double percentage;
 
@@ -23,7 +23,7 @@ public class Developer {
     @Override
     public String toString() {
         return "Developer{" +
-                "overollQuality=" + overollQuality +
+                "overallQuality=" + overallQuality +
                 ", percentage=" + percentage +
                 ", username='" + username + '\'' +
                 ", technology='" + technology + '\'' +
@@ -34,12 +34,12 @@ public class Developer {
     String username;
 
 
-    public Double getOverollQuality() {
-        return overollQuality;
+    public Double getOverallQuality() {
+        return overallQuality;
     }
 
-    public void setOverollQuality(Double overollQuality) {
-        this.overollQuality = overollQuality;
+    public void setOverallQuality(Double overallQuality) {
+        this.overallQuality = overallQuality;
     }
 
     public Double getPercentage() {
