@@ -12,7 +12,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -106,43 +105,25 @@ public class RequirementHistoryService {
             @RequestHeader HttpHeaders headers,
             HttpServletRequest request) throws Exception {
 
-        if (requirementHistory.getAcceptance() != null) {//
-            ArrayList<RequirementHistory> requirementHistoryList = requirementHistoryRepository
-                    .findByRequirement(requirementHistory.getRequirement());
-            RequirementHistory requirement1 = null;
+        if (requirementHistory == null
+                || requirementHistory.getId() == null
+                || requirementHistory.getAcceptance() == null) {
 
-            if (requirementHistoryList != null && requirementHistoryList.size() >= 1) {
-                requirement1 = requirementHistoryList.get(1);
-            }
-
-            if (requirement1 == null) {
-                return new ResponseEntity(requirementHistory, HttpStatus.NOT_FOUND);
-
-            }
-
-            return new ResponseEntity
-                    (updateRequirementScore
-                            (requirement1, requirementHistory.getAcceptance()), HttpStatus.ACCEPTED);
-        } else {
-            return new ResponseEntity(requirementHistory, HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    private RequirementHistory updateRequirementScore(RequirementHistory requirement1, Integer score) {
-        if (requirement1.getId() != null) {
-            RequirementHistory requirementHistory = requirementHistoryRepository.findOne(requirement1.getId());
-
-           if(requirementHistory!=null){
-            requirementHistory.setAcceptance(score);
-            return requirementHistoryRepository.save(requirementHistory);
-           }else{
-               return requirement1;
-           }
-        }else{
-
-            return requirement1;
-
+            return new ResponseEntity<RequirementHistory>(requirementHistory, HttpStatus.BAD_REQUEST);
         }
 
+        RequirementHistory requirementHistory1 = requirementHistoryRepository
+                .findOne(requirementHistory.getId());
+
+        if (requirementHistory1 == null) {
+            return new ResponseEntity<RequirementHistory>
+                    (requirementHistory, HttpStatus.NOT_FOUND);
+
+        }
+        requirementHistory1.setAcceptance(requirementHistory.getAcceptance());
+        return new ResponseEntity<RequirementHistory>
+                (requirementHistoryRepository.save(requirementHistory1), HttpStatus.CREATED);
     }
+
+
 }
