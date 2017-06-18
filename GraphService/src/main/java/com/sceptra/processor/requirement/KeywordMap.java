@@ -1,99 +1,154 @@
 package com.sceptra.processor.requirement;
 
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.sceptra.domain.DefineWord;
-import com.sceptra.domain.KeyWord;
-import com.sceptra.processor.Tagger;
+import com.sceptra.domain.requirement.DefineWord;
+import com.sceptra.domain.requirement.KeyWord;
 import com.sceptra.repository.DefineWordRepository;
 import com.sceptra.repository.KeyWordRepository;
 import com.sceptra.requestor.HTTPRequester;
 import com.sceptra.requestor.NLPServiceRequester;
 import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
 import org.apache.http.ParseException;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class KeywordMap {
 
     @Autowired
     DefineWordRepository defineWordRepository;
-
     @Autowired
     KeyWordRepository keyWordRepository;
-
     @Autowired
     HTTPRequester requester;
-
     @Autowired
     NLPServiceRequester nlpServiceRequester;
 
-    Tagger tagger = new Tagger();
 
+    public Map<String, Double> getWordMap(ArrayList<String> words) {
+        Map<String, Double> wordMap = new HashMap<>();
+        boolean iskeyword = false;
+        Double totalCount = 0.0;
 
-    public Map<String, Integer> getParents(String para) {
-        Map<String, Integer> keywordMap = new HashMap<>();
-
-        ArrayList<String> words = nlpServiceRequester.getCustomFilteredWordList(para);
-
-        words.forEach(word -> {
-            DefineWord defineWord = defineWordRepository.findByDescription(word);
-
-            if (defineWord != null) {
-
-                String url="http://localhost:7474/db/data/node/"+defineWord.getId()+"/relationships/all";
-
-                HttpResponse response= requester.getRequest(url);
-                HttpEntity entity = response.getEntity();
-
-                String entityString = "";
-                try {
-                    entityString = EntityUtils.toString(entity);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                JsonParser parser = new JsonParser();
-                JsonArray jsonArray = parser.parse(entityString).getAsJsonArray();
-                ArrayList<KeyWord> keywords = new ArrayList<KeyWord>();
-
-                jsonArray.forEach(jsonElement -> {
-                    JsonObject object=jsonElement.getAsJsonObject();
-                    String node=object.get("end").getAsString().split("/")[6];
-                    Long id=Long.parseLong(node);
-                    KeyWord keyword = keyWordRepository.findOne(id);
-                    keywords.add(keyword);
-                });
-
-                if (keywords != null) {
-                    keywords.forEach(defined -> {
-                        System.out.println(defined.toString());
-                        if (keywordMap.get((defined.getDescription())) == null) {
-                            keywordMap.put(defined.getDescription(), 1);
-                        } else {
-                            Integer integer = keywordMap.get((defined.getDescription()));
-                            keywordMap.put(defined.getDescription(), integer + 1);
-                        }
-
-
-                    });
+        if (words != null && words.size() == 1)
+            for (String word : words) {
+                KeyWord keyword1 = keyWordRepository.findByDescription(word);
+                if (keyword1 != null) {
+                    totalCount += 1.0;
+                    iskeyword = true;
+                    if (wordMap.get((keyword1.getDescription())) == null) {
+                        wordMap.put(keyword1.getDescription(), 1.0 / totalCount);
+                    } 
                 }
             }
+        if (!iskeyword)
+            for (String word : words) {
+                DefineWord defineWord = defineWordRepository.findByDescription(word);
+                if (defineWord != null) {
 
+                    String url = "http://localhost:7474/db/data/node/" + defineWord.getId() + "/relationships/all";
 
-        });
+                    CloseableHttpResponse response = requester.getRequest(url);
+                    HttpEntity entity = response.getEntity();
 
-        return keywordMap;
+                    String entityString = "";
+                    try {
+                        entityString = EntityUtils.toString(entity);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } finally {
+                        try {
+                            response.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    JsonParser parser = new JsonParser();
+                    JsonArray jsonArray = parser.parse(entityString).getAsJsonArray();
+                    ArrayList<KeyWord> keywords = new ArrayList<>();
+                    ArrayList<Double> ratios = new ArrayList<>();
+
+                    for(int a=0;a<jsonArray.size();a++) {
+
+                        JsonObject object =  jsonArray.get(a).getAsJsonObject();
+                        String node = object.get("end").getAsString().split("/")[6];
+                        Long id = Long.parseLong(node);
+                        KeyWord keyword = keyWordRepository.findOne(id);
+                        keywords.add(keyword);
+                        ratios.add(object.get("data").getAsJsonObject().get("definedRatio").getAsDouble());
+                    }
+
+                    int index = 0;
+                    if (keywords != null) {
+                        for (KeyWord defined : keywords) {
+
+                            if (defined.getDescription() != null) {
+                                totalCount += 1.0;
+                                System.out.println(defined.toString());
+                                if (wordMap.get((defined.getDescription())) == null) {//if keyword is not there add it
+                                    wordMap.put(defined.getDescription(), ratios.get(index++));
+                                } else {//if keyword is there update it
+                                    Double integer = wordMap.get((defined.getDescription()));
+                                    wordMap.put(defined.getDescription(),
+                                            (integer + ratios.get(index++)));
+                                }
+                            }
+
+                        }
+                    }
+                }
+
+            }
+
+        return wordMap.entrySet().stream()
+                .sorted(Map.Entry.comparingByValue())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+                        (e1, e2) -> e1, LinkedHashMap::new));
     }
 
+    public ArrayList<String> getStemList(String para) {
+        ArrayList<String> words = new ArrayList<>();
+        words = nlpServiceRequester.getCustomFilteredWordList(para);
+        words.sort((p1, p2) -> p1.compareTo(p2));
+        return words;
+    }
+
+//    public LinkedHashMap<String,Double> sortHashMapByValues(
+//            HashMap<String, Double> passedMap) {
+//        List<String> mapKeys = new ArrayList(passedMap.keySet());
+//        List<Double> mapValues = new ArrayList(passedMap.values());
+//        Collections.sort(mapValues);
+//        Collections.sort(mapKeys);
+//
+//        LinkedHashMap<String, Double> sortedMap =
+//                new LinkedHashMap<>();
+//
+//        Iterator<Double> valueIt = mapValues.iterator();
+//        while (valueIt.hasNext()) {
+//            Double val = valueIt.next();
+//            Iterator<String> keyIt = mapKeys.iterator();
+//
+//            while (keyIt.hasNext()) {
+//                String key = keyIt.next();
+//                Double comp1 = passedMap.get(key);
+//                Double comp2 = val;
+//
+//                if (comp1.equals(comp2)) {
+//                    keyIt.remove();
+//                    sortedMap.put(key, val);
+//                    break;
+//                }
+//            }
+//        }
+//        return sortedMap;
+//    }
 }

@@ -1,4 +1,4 @@
-package com.sceptra.domain;
+package com.sceptra.domain.requirement;
 
 import org.neo4j.ogm.annotation.*;
 
@@ -11,6 +11,17 @@ public class Defined {
     private Long relationshipId;
     @Property
     private String rel;
+
+    public Float getDefinedRatio() {
+        return definedRatio;
+    }
+
+    public void setDefinedRatio(Float definedRatio) {
+        this.definedRatio = definedRatio;
+    }
+
+    @Property
+    private Float definedRatio;
     @EndNode
     private KeyWord keyWord;
     @StartNode
@@ -20,7 +31,8 @@ public class Defined {
     public String toString() {
         return "Defined{" +
                 "relationshipId=" + relationshipId +
-                ", title='" + rel + '\'' +
+                ", rel='" + rel + '\'' +
+                ", definedRatio=" + definedRatio +
                 ", keyWord=" + keyWord +
                 ", defineWord=" + defineWord +
                 '}';
@@ -50,10 +62,11 @@ public class Defined {
         this.keyWord = keyWord;
     }
 
-    public Defined(KeyWord keyWord, DefineWord defineWord) {
+    public Defined(KeyWord keyWord, DefineWord defineWord,Float definedRatio) {
         this.keyWord = keyWord;
         this.defineWord = defineWord;
         this.rel=defineWord.getDescription();
+        this.definedRatio=definedRatio;
     }
 
     @Override

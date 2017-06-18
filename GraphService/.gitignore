@@ -1,10 +1,11 @@
 target
 *.class
 *.idea
+grap-service.iml
 
-/grap-service.iml
 .classpath
 .project
 .settings/
 /target/
 /gs-accessing-data-neo4j.iml
+/grap-service.iml
