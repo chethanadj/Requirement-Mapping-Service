@@ -1,6 +1,6 @@
 from flask import Flask
 from flask import request
-from processor.Tagger import get_custom_filtered_words
+from processor.sentenceProcessor import get_custom_filtered_words
 
 app = Flask(__name__)
 
