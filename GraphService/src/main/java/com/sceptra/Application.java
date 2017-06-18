@@ -1,7 +1,6 @@
 package com.sceptra;
 
 import com.sceptra.processor.developer.DeveloperFilter;
-import com.sceptra.processor.nlp.Tagger;
 import com.sceptra.processor.requirement.KeywordMap;
 import com.sceptra.processor.requirement.LevenshteinDistance;
 import com.sceptra.requestor.HTTPRequester;
@@ -58,12 +57,6 @@ public class Application {
     KeywordMap getKeywordMap() {
 
         return new KeywordMap();
-    }
-
-    @Bean
-    Tagger getTagger() {
-
-        return new Tagger();
     }
 
     @Bean
