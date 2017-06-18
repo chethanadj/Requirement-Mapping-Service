@@ -56,6 +56,11 @@ public class RequirementService {
 
         ArrayList<String> stemList = keywordMap
                 .getStemList(requirement.getParagraph());
+        if (stemList.size() == 1) {
+            stemList.clear();
+            stemList.add(requirement.getParagraph().trim().toLowerCase());
+        }
+        
         Map<String, Double> wordMap = keywordMap.getWordMap(stemList);
         if (requirementHistory == null) {
 
@@ -97,6 +102,10 @@ public class RequirementService {
 
         ArrayList<String> stemList = keywordMap
                 .getStemList(requirement.getParagraph());
+        if (stemList.size() == 1) {
+            stemList.clear();
+            stemList.add(requirement.getParagraph().trim().toLowerCase());
+        }        
         Map<String, Double> wordMap = keywordMap.getWordMap(stemList);
         if (requirementHistory == null) {
 
