@@ -44,6 +44,25 @@ public class RequirementHistoryService {
 
     }
 
+    @RequestMapping(value = base + "/packages",
+            produces = "application/json",
+            method = RequestMethod.POST)
+    public @ResponseBody
+    ResponseEntity<List<RequirementHistory>> getOldSimillarRecordsPackages(
+            @RequestBody(required = true) Requirement requirement,
+            BindingResult result,
+            @RequestHeader HttpHeaders headers,
+            HttpServletRequest request) throws Exception {
+
+        String requirementParagraph = requirement.getParagraph();
+        List<RequirementHistory> requirementHistories = requirementHistoryRepository
+                .find(requirementParagraph);
+
+        return new ResponseEntity(requirementHistories, HttpStatus.FOUND);
+
+    }
+
+
     @RequestMapping(value = base + "/withdistance",
             produces = "application/json",
             method = RequestMethod.POST)
@@ -74,6 +93,7 @@ public class RequirementHistoryService {
         return new ResponseEntity(distanceMap, HttpStatus.FOUND);
 
     }
+
 
     @RequestMapping(value = base,
             produces = "application/json",
@@ -109,9 +129,20 @@ public class RequirementHistoryService {
     }
 
     private RequirementHistory updateRequirementScore(RequirementHistory requirement1, Integer score) {
+        if (requirement1.getId() != null) {
+            RequirementHistory requirementHistory = requirementHistoryRepository.findOne(requirement1.getId());
 
-        requirement1.setAcceptance(score);
-        return requirementHistoryRepository.save(requirement1);
+           if(requirementHistory!=null){
+            requirementHistory.setAcceptance(score);
+            return requirementHistoryRepository.save(requirementHistory);
+           }else{
+               return requirement1;
+           }
+        }else{
+
+            return requirement1;
+
+        }
 
     }
 }
